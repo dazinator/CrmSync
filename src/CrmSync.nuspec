@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>CrmSync</id>
+    <version>0.0.0-alpha</version>
+    <title>CrmSync</title>
+    <description>CrmSync is a .Net library that facilitates Synchronisation of Dynamics CRM entities with a local data store. The idea is that your application can work with Crm data from a local data store and then periodically synchronise this back with Dynamics whenever convenient. The synchronisation can be Download Only. Upload Only, or Bi-Directional. The library internally utilises a combination of Microsoft Sync Framework Ado.net providers and the 'CrmAdo' library to achieve this.</description>
+    <authors>Darrell Tunnell</authors>
+    <owners>Darrell Tunnell</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <language>en-gb</language>
+    <projectUrl>https://github.com/dazinator/CrmSync</projectUrl>
+    <copyright>Copyright � Darrell Tunnell 2014</copyright>
+    <releaseNotes>
+     Initial release in alpha stage.
+    </releaseNotes>
+    <tags>Dynamics Crm Sync Offline CrmOffline DynamicsOffline SqlCe</tags>
+    <dependencies>
+      <dependency id="CrmAdo" version="1.0.10" />     
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="CrmSync\bin\Release\net40\CrmSync.dll" target="lib\net40\CrmSync.dll" />
+    <file src="CrmSync\bin\Release\net40\CrmSync.pdb" target="lib\net40\CrmSync.pdb" />
+    <file src="CrmSync\bin\Release\net45\CrmSync.dll" target="lib\net45\CrmSync.dll" />
+    <file src="CrmSync\bin\Release\net45\CrmSync.pdb" target="lib\net45\CrmSync.pdb" />  
+  </files>
+</package>
