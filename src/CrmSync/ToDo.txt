@@ -1,0 +1,24 @@
+﻿Sync Current Issue:
+
+
+At the moment when a new record is created in the local database, it doesn't have the following attributes becuase these are set only once the record is inserted into the CRM server:-
+
+createdby
+exchangerate
+modifiedby
+ownerid
+owningbusinessunit
+owningteam
+owninguser
+statecode
+statuscode
+timezoneruleversionnumber
+transactioncurrencyid
+utcconversiontimezonecode
+versionnumber
+
+In addition to this, its also possible that a plugin could fire on insert of the record into CRM and modify the record further on the server.
+
+Unfortunately, the Sync looks like it inserts the records into the server, and then gets the next anchor value at that point.. which is odd.. as that basically means our inserts have a versionnumber less than or equal to the next anchor
+which means on the next sync, they are not detected as changes.
+
