@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <connectionStrings>
+    <add name="CrmOrganisation" connectionString="Url=https://someorg.crm4.dynamics.com/; Username=someuser@someorg.onmicrosoft.com; Password=somepassword; DeviceID=some-deviceid; DevicePassword=somepassword"/>
+  </connectionStrings>
+  <system.data>
+    <DbProviderFactories>
+      <add name="CrmAdo Data Provider" invariant="System.Data.DynamicsCrm.CrmAdo" description="CrmAdo Data Provider for Microsoft Dynamics Crm 2013" type="CrmAdo.CrmDbProviderFactory, CrmAdo" />
+    </DbProviderFactories>
+  </system.data>
+</configuration>
