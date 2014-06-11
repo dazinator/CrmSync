@@ -57,21 +57,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AntiXSSLibrary">
-      <HintPath>..\packages\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\AntiXSSLibrary.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\AntiXSSLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="CrmAdo">
+    <Reference Include="CrmAdo, Version=1.0.9.0, Culture=neutral, PublicKeyToken=ba966c247ee8fd34, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\CrmAdo.1.0.9.0\lib\net45\CrmAdo.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ServiceBus, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAzure.ServiceBus.2.1.2.0\lib\net40-full\Microsoft.ServiceBus.dll</HintPath>
+      <HintPath>..\..\lib\WindowsAzure.ServiceBus.2.1.2.0\lib\net40-full\Microsoft.ServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Synchronization, Version=2.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -94,31 +95,33 @@
       <HintPath>..\..\lib\x64\Microsoft.Synchronization.Data.SqlServerCe.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.0.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.WindowsAzure.ConfigurationManager.2.0.0.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Client.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Client.CodeGeneration">
-      <HintPath>..\packages\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Client.CodeGeneration.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Client.CodeGeneration.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Portal">
-      <HintPath>..\packages\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Portal.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Portal.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Portal.Files">
-      <HintPath>..\packages\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Portal.Files.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Portal.Files.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Xrm.Sdk.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Deployment">
-      <HintPath>..\packages\Microsoft.CrmSdk.Deployment.6.0.4\lib\net40\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.Deployment.6.0.4\lib\net40\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="SQLGeneration, Version=2.5.0.0, Culture=neutral, PublicKeyToken=afc02b0a5b22e21e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SQLGeneration.2.5.0.0\lib\net40\SQLGeneration.dll</HintPath>
+      <HintPath>..\..\lib\SQLGeneration.2.5.0.0\lib\net40\SQLGeneration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -157,6 +160,29 @@
     </Compile>
     <Compile Include="CrmComponents\BasePlugin.cs" />
     <Compile Include="CrmComponents\CrmSyncChangeTrackerPlugin.cs" />
+    <Compile Include="Dynamics\CrmClientCredentialsProvider.cs" />
+    <Compile Include="Dynamics\CrmConnectionProvider.cs" />
+    <Compile Include="Dynamics\CrmServiceProvider.cs" />
+    <Compile Include="Dynamics\DynamicsAttributeTypeProvider.cs" />
+    <Compile Include="Dynamics\EntityBuilder.cs" />
+    <Compile Include="Dynamics\EntityUtils.cs" />
+    <Compile Include="Dynamics\ExplicitConnectionStringProviderWithFallbackToConfig.cs" />
+    <Compile Include="Dynamics\FailedToConnectToCrmException.cs" />
+    <Compile Include="Dynamics\ICrmClientCredentialsProvider.cs" />
+    <Compile Include="Dynamics\ICrmConnectionProvider.cs" />
+    <Compile Include="Dynamics\ICrmServiceProvider.cs" />
+    <Compile Include="Dynamics\IDynamicsAttributeTypeProvider.cs" />
+    <Compile Include="Dynamics\Metadata\CrmEntityMetadata.cs" />
+    <Compile Include="Dynamics\Metadata\EntityAttributeMetadataBuilder.cs" />
+    <Compile Include="Dynamics\Metadata\EntityConstruction.cs" />
+    <Compile Include="Dynamics\Metadata\EntityMetadataBuilder.cs" />
+    <Compile Include="Dynamics\Metadata\EntityMetadataRepository.cs" />
+    <Compile Include="Dynamics\Metadata\EntityMetadataUtils.cs" />
+    <Compile Include="Dynamics\Metadata\EntityQueryUtils.cs" />
+    <Compile Include="Dynamics\Metadata\ICrmMetaDataProvider.cs" />
+    <Compile Include="Dynamics\Metadata\IEntityMetadataRepository.cs" />
+    <Compile Include="Dynamics\Metadata\InMemoryCachedCrmMetaDataProvider.cs" />
+    <Compile Include="Dynamics\OrganisationDoesNotExistException.cs" />
     <Compile Include="SelectIncrementalChangesDbCommandAdapter.cs">
       <SubType>Component</SubType>
     </Compile>

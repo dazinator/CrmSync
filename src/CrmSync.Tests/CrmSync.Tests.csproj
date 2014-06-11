@@ -135,6 +135,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CrmSyncPluginTests.cs" />
+    <Compile Include="SystemTests\CrmSyncPluginTests.cs" />
     <Compile Include="MockOrgService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
