@@ -55,6 +55,12 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>CrmSync.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AntiXSSLibrary">
       <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\AntiXSSLibrary.dll</HintPath>
@@ -160,11 +166,27 @@
     </Compile>
     <Compile Include="CrmComponents\BasePlugin.cs" />
     <Compile Include="CrmComponents\CrmSyncChangeTrackerPlugin.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\PluginAssemblyBuilder.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Enums\AssemblySourceType.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Enums\ImageMerge.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Enums\ImageType.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Enums\IsolationMode.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Enums\PluginStepInvocationSource.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Enums\PluginStepMode.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Enums\PluginStepStage.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Enums\PluginStepDeployment.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\PluginHelper.cs" />
     <Compile Include="Dynamics\CrmClientCredentialsProvider.cs" />
     <Compile Include="Dynamics\CrmConnectionProvider.cs" />
     <Compile Include="Dynamics\CrmServiceProvider.cs" />
     <Compile Include="Dynamics\DynamicsAttributeTypeProvider.cs" />
+    <Compile Include="Dynamics\Entities\PluginAssembly.cs" />
+    <Compile Include="Dynamics\Entities\PluginType.cs" />
+    <Compile Include="Dynamics\Entities\SdkMessageProcessingStep.cs" />
+    <Compile Include="Dynamics\Entities\SdkMessageProcessingStepImage.cs" />
+    <Compile Include="Dynamics\Entities\SdkMessageProcessingStepSecureConfig.cs" />
     <Compile Include="Dynamics\EntityBuilder.cs" />
+    <Compile Include="Dynamics\EntityExists.cs" />
     <Compile Include="Dynamics\EntityUtils.cs" />
     <Compile Include="Dynamics\ExplicitConnectionStringProviderWithFallbackToConfig.cs" />
     <Compile Include="Dynamics\FailedToConnectToCrmException.cs" />
@@ -213,6 +235,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="CrmSync.snk" />
     <None Include="packages.config" />
     <None Include="Solution\SyncTest_1_0_0_managed.zip" />
   </ItemGroup>

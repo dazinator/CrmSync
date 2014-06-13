@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using CrmSync.Dynamics;
 using CrmSync.Dynamics.Metadata;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using NUnit.Framework;
-using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
 
-namespace CrmSync.Tests
+namespace CrmSync.Tests.SystemTests
 {
     [Category("System")]
     [TestFixture]

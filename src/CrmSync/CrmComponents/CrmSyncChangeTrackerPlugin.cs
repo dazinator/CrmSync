@@ -9,6 +9,9 @@ namespace CrmSync
 {
     public class CrmSyncChangeTrackerPlugin : BasePlugin
     {
+
+       // public const string PluginName = "CrmSyncChangeTrackerPlugin";
+
         public const string RowVersionAttributeName = "rowversion";
         public const string CreatedRowVersionAttributeName = "crmsync_createdrowversion";
 

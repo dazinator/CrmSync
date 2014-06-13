@@ -107,5 +107,11 @@ namespace CrmSync
             throw new InvalidPluginExecutionException(message);
         }
 
+        public virtual string PluginName()
+        {
+            return this.GetType().Name;
+        }
+      
+
     }
 }
