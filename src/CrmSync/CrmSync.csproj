@@ -166,7 +166,7 @@
     </Compile>
     <Compile Include="CrmComponents\BasePlugin.cs" />
     <Compile Include="CrmComponents\CrmSyncChangeTrackerPlugin.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\PluginAssemblyBuilder.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\PluginRegistrationBuilder.cs" />
     <Compile Include="Dynamics\ComponentRegistration\Enums\AssemblySourceType.cs" />
     <Compile Include="Dynamics\ComponentRegistration\Enums\ImageMerge.cs" />
     <Compile Include="Dynamics\ComponentRegistration\Enums\ImageType.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using CrmSync.Dynamics;
 using CrmSync.Dynamics.ComponentRegistration;
 using CrmSync.Dynamics.ComponentRegistration.Enums;
@@ -42,21 +43,31 @@ namespace CrmSync.Tests.SystemTests
                 //  var pluginTypes = (from p in orgService.CreateQuery("plugintype") select p).ToList();
                 //  var sdkMessageProcessingStep = (from p in orgService.CreateQuery("sdkmessageprocessingstep") select p).ToList();
                 //  var sdkMessageProcessingStepImage = (from p in orgService.CreateQuery("sdkmessageprocessingstepimage") select p).ToList();
+                var assy = Assembly.GetAssembly(typeof(CrmSyncChangeTrackerPlugin));
 
-                var pluginAssemblyEntity = PluginAssemblyBuilder.CreatePlugin<CrmSyncChangeTrackerPlugin>()
-                                                                   .HasDescription("Test plugin")
-                                                                   .RunsInIsolationMode(IsolationMode.Sandbox)
-                                                                   .Build();
+                var registration = PluginRegistrationBuilder.CreateRegistration()
+                                                                    .WithPluginAssemblyThatContainsPlugin<CrmSyncChangeTrackerPlugin>()
+                                                                    .HasDescription("Test plugin")
+                                                                    .RunsInIsolationMode(IsolationMode.Sandbox)
+                                                                    .PlaceAssemblyInDatabase(assy)
+                                                                    .Build();
+
+
+
 
 
                 var pluginHelper = new PluginHelper(serviceProvider);
-                var pluginExists = pluginHelper.DoesPluginAssemblyExist(pluginAssemblyEntity.Name);
-                if (!pluginExists.Exists)
+                foreach (var pluginAssembly in registration.PluginAssemblies.Values)
                 {
-                    // Create new plugin assembly registration.
-                    var newRecordId = pluginHelper.RegisterAssembly(pluginAssemblyEntity);
-                    EntitiesForCleanUp.Add("pluginassembly", newRecordId);
+                    var pluginExists = pluginHelper.DoesPluginAssemblyExist(pluginAssembly.Name);
+                    if (!pluginExists.Exists)
+                    {
+                        // Create new plugin assembly registration.
+                        var newRecordId = pluginHelper.RegisterAssembly(pluginAssembly);
+                        EntitiesForCleanUp.Add("pluginassembly", newRecordId);
+                    }
                 }
+
             }
         }
 
