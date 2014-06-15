@@ -54,7 +54,6 @@ namespace CrmSync.Tests.SystemTests
                                                                .RunsInIsolationMode(IsolationMode.Sandbox)
                                                                .PlaceInDatabase()
                                                                .WithPluginType<CrmSyncChangeTrackerPlugin>()
-
                                                                .PluginAssemblyOptions.RegistrationOptions.Build();
 
                 //.AddStep("Create")
