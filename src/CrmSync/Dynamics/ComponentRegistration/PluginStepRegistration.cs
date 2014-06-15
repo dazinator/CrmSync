@@ -1,4 +1,5 @@
 ﻿using CrmSync.Dynamics.Entities;
+using Microsoft.Xrm.Sdk;
 
 namespace CrmSync.Dynamics.ComponentRegistration
 {
@@ -18,11 +19,19 @@ namespace CrmSync.Dynamics.ComponentRegistration
 
         void PluginType_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            var pluginType = PluginTypeRegistration.PluginType;
             // PluginTypeRegistration.PluginType.PluginTypeId
-            //if (e.PropertyName == "PluginTypeId")
-            //{
-            //   SdkMessageProcessingStep.plugintypeid_sdkmessageprocessingstep = 
-            //}
+            if (e.PropertyName == "PluginTypeId")
+            {
+                if (pluginType.PluginTypeId == null)
+                {
+                    SdkMessageProcessingStep.EventHandler = null;
+                }
+                else
+                {
+                    SdkMessageProcessingStep.EventHandler = new EntityReference(pluginType.LogicalName, pluginType.PluginTypeId.Value);
+                }
+            }
             //throw new System.NotImplementedException();
         }
 

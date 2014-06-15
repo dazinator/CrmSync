@@ -61,6 +61,27 @@ namespace CrmSync.Dynamics.ComponentRegistration
             }
         }
 
+        public EntityExists DoesPluginTypeExist(string typename)
+        {
+            using (var orgService = (OrganizationServiceContext)_ServiceProvider.GetOrganisationService())
+            {
+                var query = new QueryByAttribute(PluginType.EntityLogicalName);
+                query.ColumnSet = new ColumnSet(true);
+                query.Attributes.AddRange("typename");
+                query.Values.AddRange(typename);
+                var results = orgService.RetrieveMultiple(query);
+                if (results.Entities != null && results.Entities.Count > 0)
+                {
+                    var reference = new EntityReference(PluginType.EntityLogicalName, results.Entities[0].Id);
+                    return EntityExists.Yes(reference);
+                }
+                else
+                {
+                    return EntityExists.No();
+                }
+            }
+        }
+
         public Guid RegisterAssembly(PluginAssembly pluginAssembly)
         {
             try

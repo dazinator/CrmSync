@@ -79,12 +79,27 @@ namespace CrmSync.Tests.SystemTests
                         pa.PluginAssemblyId = newRecordId;
                         EntitiesForCleanUp.Add(pa.LogicalName, newRecordId);
                     }
+                    else
+                    {
+                        EntitiesForCleanUp.Add(pa.LogicalName, pluginExists.EntityReference.Id);
+                    }
 
                     foreach (var ptr in par.PluginTypeRegistrations)
                     {
-                        var newRecordId = pluginHelper.RegisterType(ptr.PluginType);
-                        ptr.PluginType.PluginTypeId = newRecordId;
-                        EntitiesForCleanUp.Add(ptr.PluginType.LogicalName, newRecordId);
+                        var pluginTypeExists = pluginHelper.DoesPluginTypeExist(ptr.PluginType.TypeName);
+
+                        if (!pluginTypeExists.Exists)
+                        {
+                            // Create new plugin assembly registration.
+                            var newRecordId = pluginHelper.RegisterType(ptr.PluginType);
+                            ptr.PluginType.PluginTypeId = newRecordId;
+                            EntitiesForCleanUp.Add(ptr.PluginType.LogicalName, newRecordId);
+                        }
+                        else
+                        {
+                            ptr.PluginType.PluginTypeId = pluginExists.EntityReference.Id;
+                            EntitiesForCleanUp.Add(ptr.PluginType.LogicalName, pluginTypeExists.EntityReference.Id);
+                        }
                     }
                 }
 
