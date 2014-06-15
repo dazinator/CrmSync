@@ -1,7 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
-using NUnit.Framework;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 

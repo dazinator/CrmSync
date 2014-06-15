@@ -41,6 +41,9 @@ namespace CrmSync.Tests.SystemTests
                 var pluginTypes = (from p in orgService.CreateQuery("plugintype") select p).ToList();
                 var sdkMessageProcessingStep = (from p in orgService.CreateQuery("sdkmessageprocessingstep") select p).ToList();
                 var sdkMessageProcessingStepImage = (from p in orgService.CreateQuery("sdkmessageprocessingstepimage") select p).ToList();
+                var sdkMessages = (from p in orgService.CreateQuery("sdkmessage") select p).ToList();
+
+                
 
             }
         }

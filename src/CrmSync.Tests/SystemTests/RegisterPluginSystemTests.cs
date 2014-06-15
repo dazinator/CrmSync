@@ -39,32 +39,52 @@ namespace CrmSync.Tests.SystemTests
             //PluginAssembly, PluginType, SdkMessageProcessingStep, and SdkMessageProcessingStepImage. 
             using (var orgService = (OrganizationServiceContext)serviceProvider.GetOrganisationService())
             {
-                var pluginAssemblies = (from p in orgService.CreateQuery("pluginassembly") select p).ToList();
+                //var pluginAssemblies = (from p in orgService.CreateQuery("pluginassembly") select p).ToList();
+                var sdkMessageProcessingStep = (from p in orgService.CreateQuery("sdkmessageprocessingstep") select p).ToList();
+                var sdkMessages = (from p in orgService.CreateQuery("sdkmessage") select p).ToList();
+
                 //  var pluginTypes = (from p in orgService.CreateQuery("plugintype") select p).ToList();
                 //  var sdkMessageProcessingStep = (from p in orgService.CreateQuery("sdkmessageprocessingstep") select p).ToList();
                 //  var sdkMessageProcessingStepImage = (from p in orgService.CreateQuery("sdkmessageprocessingstepimage") select p).ToList();
-                var assy = Assembly.GetAssembly(typeof(CrmSyncChangeTrackerPlugin));
+                // var assy = Assembly.GetAssembly(typeof(CrmSyncChangeTrackerPlugin));
 
-                var registration = PluginRegistrationBuilder.CreateRegistration()
-                                                                    .WithPluginAssemblyThatContainsPlugin<CrmSyncChangeTrackerPlugin>()
-                                                                    .HasDescription("Test plugin")
-                                                                    .RunsInIsolationMode(IsolationMode.Sandbox)
-                                                                    .PlaceAssemblyInDatabase(assy)
-                                                                    .Build();
+                var registration = ComponentRegistrationBuilder.CreateRegistration()
+                                                               .WithPluginAssemblyThatContainsPlugin<CrmSyncChangeTrackerPlugin>()
+                                                               .HasDescription("Test plugin")
+                                                               .RunsInIsolationMode(IsolationMode.Sandbox)
+                                                               .PlaceInDatabase()
+                                                               .WithPluginType<CrmSyncChangeTrackerPlugin>()
 
+                                                               .PluginAssemblyOptions.RegistrationOptions.Build();
+
+                //.AddStep("Create")
+                //    .Mode(PluginStepMode.Synchronous)
+                //    .Rank(1)
+                //    .Stage(PluginStepStage.PostOperation)
+                //    .SupportedDeployment(PluginStepDeployment.ServerOnly)
+                //    .PluginTypeOptions.PluginAssemblyOptions.RegistrationOptions.Build();
 
 
 
 
                 var pluginHelper = new PluginHelper(serviceProvider);
-                foreach (var pluginAssembly in registration.PluginAssemblies.Values)
+                foreach (var par in registration.PluginAssemblyRegistrations)
                 {
-                    var pluginExists = pluginHelper.DoesPluginAssemblyExist(pluginAssembly.Name);
+                    var pa = par.PluginAssembly;
+                    var pluginExists = pluginHelper.DoesPluginAssemblyExist(pa.Name);
                     if (!pluginExists.Exists)
                     {
                         // Create new plugin assembly registration.
-                        var newRecordId = pluginHelper.RegisterAssembly(pluginAssembly);
-                        EntitiesForCleanUp.Add("pluginassembly", newRecordId);
+                        var newRecordId = pluginHelper.RegisterAssembly(pa);
+                        pa.PluginAssemblyId = newRecordId;
+                        EntitiesForCleanUp.Add(pa.LogicalName, newRecordId);
+                    }
+
+                    foreach (var ptr in par.PluginTypeRegistrations)
+                    {
+                        var newRecordId = pluginHelper.RegisterType(ptr.PluginType);
+                        ptr.PluginType.PluginTypeId = newRecordId;
+                        EntitiesForCleanUp.Add(ptr.PluginType.LogicalName, newRecordId);
                     }
                 }
 
@@ -77,15 +97,16 @@ namespace CrmSync.Tests.SystemTests
             // Ensure custom test entity removed.
             var service = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
 
-            // clean up
-            DeleteEntities(service, EntitiesForCleanUp);
+            // clean up in reverse creation order.
+            var entities = EntitiesForCleanUp.Reverse();
+            DeleteEntities(service, entities);
         }
 
         /// <summary>
         /// Ensures test entity is deleted from CRM.
         /// </summary>
         /// <param name="serviceProvider"></param>
-        private void DeleteEntities(ICrmServiceProvider serviceProvider, Dictionary<string, Guid> entities)
+        private void DeleteEntities(ICrmServiceProvider serviceProvider, IEnumerable<KeyValuePair<string, Guid>> entities)
         {
             using (var orgService = (OrganizationServiceContext)serviceProvider.GetOrganisationService())
             {

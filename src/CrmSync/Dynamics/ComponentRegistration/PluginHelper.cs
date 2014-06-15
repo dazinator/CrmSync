@@ -76,5 +76,21 @@ namespace CrmSync.Dynamics.ComponentRegistration
                 throw;
             }
         }
+
+        public Guid RegisterType(PluginType pluginType)
+        {
+            try
+            {
+                using (var orgService = (OrganizationServiceContext)_ServiceProvider.GetOrganisationService())
+                {
+                    var response = (CreateResponse)orgService.Execute(new CreateRequest() { Target = pluginType });
+                    return response.id;
+                }
+            }
+            catch (FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault>)
+            {
+                throw;
+            }
+        }
     }
 }

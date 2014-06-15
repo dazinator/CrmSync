@@ -166,7 +166,10 @@
     </Compile>
     <Compile Include="CrmComponents\BasePlugin.cs" />
     <Compile Include="CrmComponents\CrmSyncChangeTrackerPlugin.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\PluginRegistrationBuilder.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\ComponentRegistration.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\PluginAssemblyOptionsBuilder.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\PluginAssemblyRegistration.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\ComponentRegistrationBuilder.cs" />
     <Compile Include="Dynamics\ComponentRegistration\Enums\AssemblySourceType.cs" />
     <Compile Include="Dynamics\ComponentRegistration\Enums\ImageMerge.cs" />
     <Compile Include="Dynamics\ComponentRegistration\Enums\ImageType.cs" />
@@ -176,6 +179,10 @@
     <Compile Include="Dynamics\ComponentRegistration\Enums\PluginStepStage.cs" />
     <Compile Include="Dynamics\ComponentRegistration\Enums\PluginStepDeployment.cs" />
     <Compile Include="Dynamics\ComponentRegistration\PluginHelper.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\PluginStepOptionsBuilder.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\PluginStepRegistration.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\PluginTypeOptionsBuilder.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\PluginTypeRegistration.cs" />
     <Compile Include="Dynamics\CrmClientCredentialsProvider.cs" />
     <Compile Include="Dynamics\CrmConnectionProvider.cs" />
     <Compile Include="Dynamics\CrmServiceProvider.cs" />

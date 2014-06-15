@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace CrmSync.Dynamics.Entities
 {
     /// <summary>
@@ -15,6 +17,7 @@ namespace CrmSync.Dynamics.Entities
         public PluginAssembly() :
             base(EntityLogicalName)
         {
+          
         }
 
         public const string EntityLogicalName = "pluginassembly";
