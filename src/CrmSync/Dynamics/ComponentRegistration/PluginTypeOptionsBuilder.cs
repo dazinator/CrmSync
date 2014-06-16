@@ -13,14 +13,14 @@
             PluginTypeRegistration = pluginTypeRegistration;
         }
 
-        public PluginStepOptionsBuilder ExecuteOn(string sdkMessageName, string primaryEntityLogicalName, string secondaryEntityLogicalName = "")
+        public PluginStepOptionsBuilder ExecutesOn(string sdkMessageName, string primaryEntityLogicalName, string secondaryEntityLogicalName = "")
         {
             var pluginStepRegistration = new PluginStepRegistration(this.PluginTypeRegistration, sdkMessageName, primaryEntityLogicalName, secondaryEntityLogicalName);
             PluginTypeRegistration.PluginStepRegistrations.Add(pluginStepRegistration);
             return new PluginStepOptionsBuilder(this, pluginStepRegistration);
         }
 
-        public PluginStepOptionsBuilder ExecuteOn(SdkMessageNames sdkMessageName, string primaryEntityLogicalName, string secondaryEntityLogicalName = "")
+        public PluginStepOptionsBuilder ExecutesOn(SdkMessageNames sdkMessageName, string primaryEntityLogicalName, string secondaryEntityLogicalName = "")
         {
             var pluginStepRegistration = new PluginStepRegistration(this.PluginTypeRegistration, sdkMessageName, primaryEntityLogicalName, secondaryEntityLogicalName);
             PluginTypeRegistration.PluginStepRegistrations.Add(pluginStepRegistration);

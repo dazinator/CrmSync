@@ -102,19 +102,19 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return this;
         }
 
-        public PluginStepOptionsBuilder RunsOnServerOnly()
+        public PluginStepOptionsBuilder OnlyOnServer()
         {
             this.SupportedDeployment(PluginStepDeployment.ServerOnly);
             return this;
         }
 
-        public PluginStepOptionsBuilder RunsOfflineOnly()
+        public PluginStepOptionsBuilder OnlyOffline()
         {
             this.SupportedDeployment(PluginStepDeployment.OfflineOnly);
             return this;
         }
 
-        public PluginStepOptionsBuilder RunsOnServerAndOffline()
+        public PluginStepOptionsBuilder OnServerAndOffline()
         {
             this.SupportedDeployment(PluginStepDeployment.Both);
             return this;

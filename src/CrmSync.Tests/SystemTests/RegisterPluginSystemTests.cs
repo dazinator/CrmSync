@@ -42,14 +42,14 @@ namespace CrmSync.Tests.SystemTests
 
                 var registration = ComponentRegistrationBuilder.CreateRegistration()
                                                                .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>()
-                                                                .WithDescription("Test plugin")
-                                                                .RunsInIsolationMode(IsolationMode.Sandbox)
-                                                                .RegisterAssemblyInDatabase()
-                                                               .RegisterPlugin<CrmSyncChangeTrackerPlugin>()
-                                                                .ExecuteOn(SdkMessageNames.Create, "contact")
+                                                                .Described("Test plugin assembly")
+                                                                .RunsInSandboxMode()
+                                                                .LocatedInDatabase()
+                                                               .HasPlugin<CrmSyncChangeTrackerPlugin>()
+                                                                .ExecutesOn(SdkMessageNames.Create, "contact")
                                                                 .Synchronously()
                                                                 .PostOperation()
-                                                                .RunsOnServerOnly()
+                                                                .OnlyOnServer()
                                                                .Build();
 
                 var pluginHelper = new PluginHelper(serviceProvider);

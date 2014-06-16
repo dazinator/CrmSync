@@ -19,7 +19,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             RegistrationOptions = componentRegistrationnBuilder;
         }
 
-        public PluginAssemblyOptionsBuilder RegisterAssemblyInDatabase()
+        public PluginAssemblyOptionsBuilder LocatedInDatabase()
         {
             var pl = PluginAssemblyRegistration.PluginAssembly;
             pl.SourceType = new OptionSetValue()
@@ -31,7 +31,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return this;
         }
 
-        public PluginAssemblyOptionsBuilder RegisterAssemblyInDatabase(string assemblyFilePath)
+        public PluginAssemblyOptionsBuilder LocatedInDatabase(string assemblyFilePath)
         {
             var pl = PluginAssemblyRegistration.PluginAssembly;
             pl.SourceType = new OptionSetValue()
@@ -42,7 +42,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return this;
         }
 
-        public PluginAssemblyOptionsBuilder RegisterAssemblyOnServerFileSystem(string serverFilename)
+        public PluginAssemblyOptionsBuilder LocatedOnServerFileSystem(string serverFilename)
         {
             var pl = PluginAssemblyRegistration.PluginAssembly;
             pl.SourceType = new OptionSetValue()
@@ -53,7 +53,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return this;
         }
 
-        public PluginAssemblyOptionsBuilder RegisterAssemblyOnServerGac()
+        public PluginAssemblyOptionsBuilder LocatedInGacOnServer()
         {
             var pl = PluginAssemblyRegistration.PluginAssembly;
             pl.SourceType = new OptionSetValue()
@@ -63,7 +63,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return this;
         }
 
-        public PluginAssemblyOptionsBuilder WithDescription(string description)
+        public PluginAssemblyOptionsBuilder Described(string description)
         {
             var pl = PluginAssemblyRegistration.PluginAssembly;
             pl.Description = description;
@@ -91,6 +91,12 @@ namespace CrmSync.Dynamics.ComponentRegistration
                 {
                     Value = (int)isolationMode
                 };
+            return this;
+        }
+
+        public PluginAssemblyOptionsBuilder RunsInSandboxMode()
+        {
+            RunsInIsolationMode(IsolationMode.Sandbox);
             return this;
         }
 
@@ -131,7 +137,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             //  return true;
         }
 
-        public PluginTypeOptionsBuilder RegisterPlugin<T>() where T : IPlugin
+        public PluginTypeOptionsBuilder HasPlugin<T>() where T : IPlugin
         {
             //var assy = PluginAssemblyRegistration.Assembly;
             //var types = assy.GetTypes().Where(i => i.IsClass && typeof(IPlugin).IsAssignableFrom(i));
