@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using CrmSync.Dynamics.Entities;
@@ -113,5 +114,68 @@ namespace CrmSync.Dynamics.ComponentRegistration
                 throw;
             }
         }
+
+        public Guid RegisterStep(SdkMessageProcessingStep step)
+        {
+            try
+            {
+                using (var orgService = (OrganizationServiceContext)_ServiceProvider.GetOrganisationService())
+                {
+                    if (step.plugintype_sdkmessageprocessingstep != null)
+                    {
+                        if (!orgService.IsAttached(step.plugintype_sdkmessageprocessingstep))
+                        {
+                            orgService.Attach(step.plugintype_sdkmessageprocessingstep);
+                        }
+                      
+                    }
+
+                    orgService.AddObject(step);
+                    orgService.SaveChanges();
+                    return step.Id;
+                    //  var response = (CreateResponse)orgService.Execute(new CreateRequest() { Target = step });
+                    //return response.id;
+                }
+            }
+            catch (FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault>)
+            {
+                throw;
+            }
+        }
+
+        public Guid GetSdkMessageFilterId(string primaryEntity, string secondaryEntity, Guid messageId)
+        {
+            using (var orgService = (OrganizationServiceContext)_ServiceProvider.GetOrganisationService())
+            {
+                if (string.IsNullOrEmpty(secondaryEntity) || (!string.IsNullOrEmpty(secondaryEntity) && secondaryEntity.ToLower() == "none"))
+                {
+                    // only a primary entity.
+                    var sdkMessageFilters = from s in orgService.CreateQuery("sdkmessagefilter")
+                                            where (string)s["primaryobjecttypecode"] == primaryEntity &&
+                                            (Guid)s["sdkmessageid"] == messageId
+                                            select s;
+                    return sdkMessageFilters.First().Id;
+                }
+
+                var query = from s in orgService.CreateQuery("sdkmessagefilter")
+                            where (string)s["primaryobjecttypecode"] == primaryEntity &&
+                              (string)s["secondaryobjecttypecode"] == secondaryEntity &&
+                             (Guid)s["sdkmessageid"] == messageId
+                            select s;
+                return query.First().Id;
+            }
+        }
+
+        public Guid GetMessageId(string sdkMessageName)
+        {
+            using (var orgService = (OrganizationServiceContext)_ServiceProvider.GetOrganisationService())
+            {
+                var sdkMessages = from s in orgService.CreateQuery("sdkmessage")
+                                  where (string)s["name"] == sdkMessageName
+                                  select s;
+                return sdkMessages.First().Id;
+            }
+        }
+
     }
 }

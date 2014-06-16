@@ -33,7 +33,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return new ComponentRegistrationBuilder();
         }
 
-        public PluginAssemblyOptionsBuilder WithPluginAssembly(Assembly assembly)
+        public PluginAssemblyOptionsBuilder ForAssembly(Assembly assembly)
         {
             var assemblyName = assembly.GetName();
             var pluginName = assemblyName.Name;
@@ -75,7 +75,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return new PluginAssemblyOptionsBuilder(this, par);
         }
 
-        public PluginAssemblyOptionsBuilder WithPluginAssemblyThatContainsPlugin<T>() where T : IPlugin
+        public PluginAssemblyOptionsBuilder ForAssemblyThatContainsThisPlugin<T>() where T : IPlugin
         {
 
             var assembly = Assembly.GetAssembly(typeof(T));

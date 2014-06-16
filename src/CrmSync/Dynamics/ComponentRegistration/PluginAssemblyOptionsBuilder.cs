@@ -19,7 +19,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             RegistrationOptions = componentRegistrationnBuilder;
         }
 
-        public PluginAssemblyOptionsBuilder PlaceInDatabase()
+        public PluginAssemblyOptionsBuilder RegisterAssemblyInDatabase()
         {
             var pl = PluginAssemblyRegistration.PluginAssembly;
             pl.SourceType = new OptionSetValue()
@@ -31,7 +31,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return this;
         }
 
-        public PluginAssemblyOptionsBuilder PlaceAssemblyInDatabase(string assemblyFilePath)
+        public PluginAssemblyOptionsBuilder RegisterAssemblyInDatabase(string assemblyFilePath)
         {
             var pl = PluginAssemblyRegistration.PluginAssembly;
             pl.SourceType = new OptionSetValue()
@@ -42,7 +42,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return this;
         }
 
-        public PluginAssemblyOptionsBuilder IsLocatedOnServerFileSystem(string serverFilename)
+        public PluginAssemblyOptionsBuilder RegisterAssemblyOnServerFileSystem(string serverFilename)
         {
             var pl = PluginAssemblyRegistration.PluginAssembly;
             pl.SourceType = new OptionSetValue()
@@ -53,7 +53,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return this;
         }
 
-        public PluginAssemblyOptionsBuilder IsLocatedOnServerGac()
+        public PluginAssemblyOptionsBuilder RegisterAssemblyOnServerGac()
         {
             var pl = PluginAssemblyRegistration.PluginAssembly;
             pl.SourceType = new OptionSetValue()

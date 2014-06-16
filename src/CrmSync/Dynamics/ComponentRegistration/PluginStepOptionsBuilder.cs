@@ -15,6 +15,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
         {
             PluginTypeOptions = pluginTypeOptionsBuilder;
             PluginStepRegistration = pluginStepRegistration;
+            Rank(1);
         }
 
         public PluginStepOptionsBuilder SupportedDeployment(PluginStepDeployment deployment)

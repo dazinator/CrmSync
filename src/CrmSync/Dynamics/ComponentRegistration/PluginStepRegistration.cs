@@ -6,7 +6,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
     public class PluginStepRegistration
     {
 
-        public PluginStepRegistration(PluginTypeRegistration pluginTypeRegistration, string sdkMessageName)
+        public PluginStepRegistration(PluginTypeRegistration pluginTypeRegistration, string sdkMessageName, string primaryEntityName, string secondaryEntityName = "")
         {
             PluginTypeRegistration = pluginTypeRegistration;
             SdkMessageProcessingStep = new SdkMessageProcessingStep();
@@ -14,7 +14,13 @@ namespace CrmSync.Dynamics.ComponentRegistration
             PluginTypeRegistration.PluginType.PropertyChanged += PluginType_PropertyChanged;
             SdkMessageProcessingStep.plugintype_sdkmessageprocessingstep = pluginTypeRegistration.PluginType;
             SdkMessageProcessingStep.plugintypeid_sdkmessageprocessingstep = pluginTypeRegistration.PluginType;
+            PrimaryEntityName = primaryEntityName;
+            SecondaryEntityName = secondaryEntityName;
+        }
 
+        public PluginStepRegistration(PluginTypeRegistration pluginTypeRegistration, SdkMessageNames sdkMessageName, string primaryEntityName, string secondaryEntityName = "")
+            : this(pluginTypeRegistration, sdkMessageName.ToString(), primaryEntityName, secondaryEntityName)
+        {
         }
 
         void PluginType_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -40,6 +46,10 @@ namespace CrmSync.Dynamics.ComponentRegistration
         public SdkMessageProcessingStep SdkMessageProcessingStep { get; set; }
 
         public string SdkMessageName { get; set; }
+
+        public string PrimaryEntityName { get; set; }
+
+        public string SecondaryEntityName { get; set; }
 
 
     }

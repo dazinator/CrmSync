@@ -183,6 +183,7 @@
     <Compile Include="Dynamics\ComponentRegistration\PluginStepRegistration.cs" />
     <Compile Include="Dynamics\ComponentRegistration\PluginTypeOptionsBuilder.cs" />
     <Compile Include="Dynamics\ComponentRegistration\PluginTypeRegistration.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\SdkMessageNames.cs" />
     <Compile Include="Dynamics\CrmClientCredentialsProvider.cs" />
     <Compile Include="Dynamics\CrmConnectionProvider.cs" />
     <Compile Include="Dynamics\CrmServiceProvider.cs" />

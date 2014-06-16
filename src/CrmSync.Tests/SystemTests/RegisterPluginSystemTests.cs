@@ -39,32 +39,19 @@ namespace CrmSync.Tests.SystemTests
             //PluginAssembly, PluginType, SdkMessageProcessingStep, and SdkMessageProcessingStepImage. 
             using (var orgService = (OrganizationServiceContext)serviceProvider.GetOrganisationService())
             {
-                //var pluginAssemblies = (from p in orgService.CreateQuery("pluginassembly") select p).ToList();
-                var sdkMessageProcessingStep = (from p in orgService.CreateQuery("sdkmessageprocessingstep") select p).ToList();
-                var sdkMessages = (from p in orgService.CreateQuery("sdkmessage") select p).ToList();
-
-                //  var pluginTypes = (from p in orgService.CreateQuery("plugintype") select p).ToList();
-                //  var sdkMessageProcessingStep = (from p in orgService.CreateQuery("sdkmessageprocessingstep") select p).ToList();
-                //  var sdkMessageProcessingStepImage = (from p in orgService.CreateQuery("sdkmessageprocessingstepimage") select p).ToList();
-                // var assy = Assembly.GetAssembly(typeof(CrmSyncChangeTrackerPlugin));
 
                 var registration = ComponentRegistrationBuilder.CreateRegistration()
-                                                               .WithPluginAssemblyThatContainsPlugin<CrmSyncChangeTrackerPlugin>()
+                                                               .ForAssemblyThatContainsThisPlugin<CrmSyncChangeTrackerPlugin>()
                                                                .HasDescription("Test plugin")
                                                                .RunsInIsolationMode(IsolationMode.Sandbox)
-                                                               .PlaceInDatabase()
+                                                               .RegisterAssemblyInDatabase()
                                                                .WithPluginType<CrmSyncChangeTrackerPlugin>()
+                                                                    .AddStep(SdkMessageNames.Create, "contact")
+                                                                        .Mode(PluginStepMode.Synchronous)
+                                                                        .Stage(PluginStepStage.PostOperation)
+                                                                        .SupportedDeployment(PluginStepDeployment.ServerOnly)
+                                                                        .PluginTypeOptions
                                                                .PluginAssemblyOptions.RegistrationOptions.Build();
-
-                //.AddStep("Create")
-                //    .Mode(PluginStepMode.Synchronous)
-                //    .Rank(1)
-                //    .Stage(PluginStepStage.PostOperation)
-                //    .SupportedDeployment(PluginStepDeployment.ServerOnly)
-                //    .PluginTypeOptions.PluginAssemblyOptions.RegistrationOptions.Build();
-
-
-
 
                 var pluginHelper = new PluginHelper(serviceProvider);
                 foreach (var par in registration.PluginAssemblyRegistrations)
@@ -99,6 +86,24 @@ namespace CrmSync.Tests.SystemTests
                             ptr.PluginType.PluginTypeId = pluginExists.EntityReference.Id;
                             EntitiesForCleanUp.Add(ptr.PluginType.LogicalName, pluginTypeExists.EntityReference.Id);
                         }
+
+                        // for each step
+                        foreach (var ps in ptr.PluginStepRegistrations)
+                        {
+                            // todo: check primary and secondary entity are valid.
+                            // check message name is valid.
+                            var messageId = pluginHelper.GetMessageId(ps.SdkMessageName);
+                            ps.SdkMessageProcessingStep.SdkMessageId = new EntityReference("sdkmessage", messageId);
+
+                            var sdkFilterMessageId = pluginHelper.GetSdkMessageFilterId(ps.PrimaryEntityName,
+                                                                                        ps.SecondaryEntityName,
+                                                                                        messageId);
+                            ps.SdkMessageProcessingStep.SdkMessageFilterId = new EntityReference("sdkmessagefilter", sdkFilterMessageId);
+                            
+                            var newRecordId = pluginHelper.RegisterStep(ps.SdkMessageProcessingStep);
+                            EntitiesForCleanUp.Add(ps.SdkMessageProcessingStep.LogicalName, newRecordId);
+
+                        }
                     }
                 }
 
@@ -132,6 +137,8 @@ namespace CrmSync.Tests.SystemTests
                             {
                                 Target = new EntityReference() { LogicalName = entity.Key, Id = entity.Value }
                             });
+
+                        Console.WriteLine(string.Format("Deleted entity: {0} with id : {1}", entity.Key, entity.Value));
 
                     }
                     catch (Exception e)
