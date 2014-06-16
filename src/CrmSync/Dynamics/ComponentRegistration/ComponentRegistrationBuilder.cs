@@ -75,7 +75,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return new PluginAssemblyOptionsBuilder(this, par);
         }
 
-        public PluginAssemblyOptionsBuilder ForAssemblyThatContainsThisPlugin<T>() where T : IPlugin
+        public PluginAssemblyOptionsBuilder ForTheAssemblyContainingThisPlugin<T>() where T : IPlugin
         {
 
             var assembly = Assembly.GetAssembly(typeof(T));

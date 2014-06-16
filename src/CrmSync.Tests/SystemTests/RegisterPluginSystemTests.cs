@@ -41,11 +41,11 @@ namespace CrmSync.Tests.SystemTests
             {
 
                 var registration = ComponentRegistrationBuilder.CreateRegistration()
-                                                               .ForAssemblyThatContainsThisPlugin<CrmSyncChangeTrackerPlugin>()
-                                                               .HasDescription("Test plugin")
+                                                               .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>()
+                                                               .WithDescription("Test plugin")
                                                                .RunsInIsolationMode(IsolationMode.Sandbox)
                                                                .RegisterAssemblyInDatabase()
-                                                               .WithPluginType<CrmSyncChangeTrackerPlugin>()
+                                                               .RegisterPlugin<CrmSyncChangeTrackerPlugin>()
                                                                     .AddStep(SdkMessageNames.Create, "contact")
                                                                         .Mode(PluginStepMode.Synchronous)
                                                                         .Stage(PluginStepStage.PostOperation)

@@ -63,7 +63,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return this;
         }
 
-        public PluginAssemblyOptionsBuilder HasDescription(string description)
+        public PluginAssemblyOptionsBuilder WithDescription(string description)
         {
             var pl = PluginAssemblyRegistration.PluginAssembly;
             pl.Description = description;
@@ -131,7 +131,7 @@ namespace CrmSync.Dynamics.ComponentRegistration
             //  return true;
         }
 
-        public PluginTypeOptionsBuilder WithPluginType<T>() where T : IPlugin
+        public PluginTypeOptionsBuilder RegisterPlugin<T>() where T : IPlugin
         {
             //var assy = PluginAssemblyRegistration.Assembly;
             //var types = assy.GetTypes().Where(i => i.IsClass && typeof(IPlugin).IsAssignableFrom(i));
