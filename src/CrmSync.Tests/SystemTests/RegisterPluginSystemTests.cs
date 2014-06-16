@@ -46,7 +46,7 @@ namespace CrmSync.Tests.SystemTests
                                                                .RunsInIsolationMode(IsolationMode.Sandbox)
                                                                .RegisterAssemblyInDatabase()
                                                                .RegisterPlugin<CrmSyncChangeTrackerPlugin>()
-                                                                    .AddStep(SdkMessageNames.Create, "contact")
+                                                                    .ExecutedOn(SdkMessageNames.Create, "contact")
                                                                         .Mode(PluginStepMode.Synchronous)
                                                                         .Stage(PluginStepStage.PostOperation)
                                                                         .SupportedDeployment(PluginStepDeployment.ServerOnly)
