@@ -42,16 +42,15 @@ namespace CrmSync.Tests.SystemTests
 
                 var registration = ComponentRegistrationBuilder.CreateRegistration()
                                                                .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>()
-                                                               .WithDescription("Test plugin")
-                                                               .RunsInIsolationMode(IsolationMode.Sandbox)
-                                                               .RegisterAssemblyInDatabase()
+                                                                .WithDescription("Test plugin")
+                                                                .RunsInIsolationMode(IsolationMode.Sandbox)
+                                                                .RegisterAssemblyInDatabase()
                                                                .RegisterPlugin<CrmSyncChangeTrackerPlugin>()
-                                                                    .ExecutedOn(SdkMessageNames.Create, "contact")
-                                                                        .Mode(PluginStepMode.Synchronous)
-                                                                        .Stage(PluginStepStage.PostOperation)
-                                                                        .SupportedDeployment(PluginStepDeployment.ServerOnly)
-                                                                        .PluginTypeOptions
-                                                               .PluginAssemblyOptions.RegistrationOptions.Build();
+                                                                .ExecuteOn(SdkMessageNames.Create, "contact")
+                                                                .Synchronously()
+                                                                .PostOperation()
+                                                                .RunsOnServerOnly()
+                                                               .Build();
 
                 var pluginHelper = new PluginHelper(serviceProvider);
                 foreach (var par in registration.PluginAssemblyRegistrations)
@@ -99,7 +98,7 @@ namespace CrmSync.Tests.SystemTests
                                                                                         ps.SecondaryEntityName,
                                                                                         messageId);
                             ps.SdkMessageProcessingStep.SdkMessageFilterId = new EntityReference("sdkmessagefilter", sdkFilterMessageId);
-                            
+
                             var newRecordId = pluginHelper.RegisterStep(ps.SdkMessageProcessingStep);
                             EntitiesForCleanUp.Add(ps.SdkMessageProcessingStep.LogicalName, newRecordId);
 

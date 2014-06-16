@@ -11,7 +11,8 @@ namespace CrmSync.Dynamics.ComponentRegistration
 
         public PluginTypeOptionsBuilder PluginTypeOptions { get; set; }
 
-        public PluginStepOptionsBuilder(PluginTypeOptionsBuilder pluginTypeOptionsBuilder, PluginStepRegistration pluginStepRegistration)
+        public PluginStepOptionsBuilder(PluginTypeOptionsBuilder pluginTypeOptionsBuilder,
+                                        PluginStepRegistration pluginStepRegistration)
         {
             PluginTypeOptions = pluginTypeOptionsBuilder;
             PluginStepRegistration = pluginStepRegistration;
@@ -68,12 +69,61 @@ namespace CrmSync.Dynamics.ComponentRegistration
         {
             var pl = PluginStepRegistration.SdkMessageProcessingStep;
             pl.Rank = rank;
-            
-
-
             return this;
         }
 
+        public PluginStepOptionsBuilder Synchronously()
+        {
+            this.Mode(PluginStepMode.Synchronous);
+            return this;
+        }
+
+        public PluginStepOptionsBuilder Asynchronously()
+        {
+            this.Mode(PluginStepMode.Asynchronous);
+            return this;
+        }
+
+        public PluginStepOptionsBuilder PostOperation()
+        {
+            this.Stage(PluginStepStage.PostOperation);
+            return this;
+        }
+
+        public PluginStepOptionsBuilder PreOperation()
+        {
+            this.Stage(PluginStepStage.PreOperation);
+            return this;
+        }
+
+        public PluginStepOptionsBuilder PreValidation()
+        {
+            this.Stage(PluginStepStage.PreValidation);
+            return this;
+        }
+
+        public PluginStepOptionsBuilder RunsOnServerOnly()
+        {
+            this.SupportedDeployment(PluginStepDeployment.ServerOnly);
+            return this;
+        }
+
+        public PluginStepOptionsBuilder RunsOfflineOnly()
+        {
+            this.SupportedDeployment(PluginStepDeployment.OfflineOnly);
+            return this;
+        }
+
+        public PluginStepOptionsBuilder RunsOnServerAndOffline()
+        {
+            this.SupportedDeployment(PluginStepDeployment.Both);
+            return this;
+        }
+        
+        public ComponentRegistration Build()
+        {
+            return PluginTypeOptions.PluginAssemblyOptions.RegistrationOptions.Build();
+        }
 
 
     }
