@@ -164,9 +164,8 @@
     <Compile Include="AnchorDbCommandAdapter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CrmComponents\BasePlugin.cs" />
-    <Compile Include="CrmComponents\CrmSyncChangeTrackerPlugin.cs" />
     <Compile Include="Dynamics\ComponentRegistration\ComponentRegistration.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\IRegistrationUpdater.cs" />
     <Compile Include="Dynamics\ComponentRegistration\PluginAssemblyOptionsBuilder.cs" />
     <Compile Include="Dynamics\ComponentRegistration\PluginAssemblyRegistration.cs" />
     <Compile Include="Dynamics\ComponentRegistration\ComponentRegistrationBuilder.cs" />
@@ -183,16 +182,18 @@
     <Compile Include="Dynamics\ComponentRegistration\PluginStepRegistration.cs" />
     <Compile Include="Dynamics\ComponentRegistration\PluginTypeOptionsBuilder.cs" />
     <Compile Include="Dynamics\ComponentRegistration\PluginTypeRegistration.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\SdkMessageNames.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\RegistrationInfo.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\RegistrationDeployer.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Enums\SdkMessageNames.cs" />
     <Compile Include="Dynamics\CrmClientCredentialsProvider.cs" />
     <Compile Include="Dynamics\CrmConnectionProvider.cs" />
     <Compile Include="Dynamics\CrmServiceProvider.cs" />
     <Compile Include="Dynamics\DynamicsAttributeTypeProvider.cs" />
-    <Compile Include="Dynamics\Entities\PluginAssembly.cs" />
-    <Compile Include="Dynamics\Entities\PluginType.cs" />
-    <Compile Include="Dynamics\Entities\SdkMessageProcessingStep.cs" />
-    <Compile Include="Dynamics\Entities\SdkMessageProcessingStepImage.cs" />
-    <Compile Include="Dynamics\Entities\SdkMessageProcessingStepSecureConfig.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Entities\PluginAssembly.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Entities\PluginType.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Entities\SdkMessageProcessingStep.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Entities\SdkMessageProcessingStepImage.cs" />
+    <Compile Include="Dynamics\ComponentRegistration\Entities\SdkMessageProcessingStepSecureConfig.cs" />
     <Compile Include="Dynamics\EntityBuilder.cs" />
     <Compile Include="Dynamics\EntityExists.cs" />
     <Compile Include="Dynamics\EntityUtils.cs" />
@@ -250,7 +251,12 @@
   <ItemGroup>
     <Content Include="ToDo.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CrmSync.Plugin\CrmSync.CrmPlugin.csproj">
+      <Project>{87d7865d-d2b3-4871-84c3-156761328a95}</Project>
+      <Name>CrmSync.CrmPlugin</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug xcopy /y $(ProjectDir)\..\..\lib\x64\SQLCompact3.5\native\*.dll $(TargetDir)

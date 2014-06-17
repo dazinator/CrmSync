@@ -1,4 +1,6 @@
-﻿namespace CrmSync.Dynamics.ComponentRegistration
+﻿using CrmSync.Dynamics.ComponentRegistration.Enums;
+
+namespace CrmSync.Dynamics.ComponentRegistration
 {
     public class PluginTypeOptionsBuilder
     {

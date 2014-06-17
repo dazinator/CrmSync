@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using CrmSync.Dynamics.ComponentRegistration.Entities;
 using CrmSync.Dynamics.ComponentRegistration.Enums;
-using CrmSync.Dynamics.Entities;
 using Microsoft.Xrm.Sdk;
 
 namespace CrmSync.Dynamics.ComponentRegistration
@@ -23,9 +23,14 @@ namespace CrmSync.Dynamics.ComponentRegistration
             ComponentRegistration = new ComponentRegistration();
         }
 
-        public ComponentRegistration Build()
+        public IRegistrationDeployer DeployTo(string orgConnectionString)
         {
-            return ComponentRegistration;
+            return new RegistrationDeployer(ComponentRegistration, orgConnectionString);
+        }
+
+        public IRegistrationDeployer DeployTo(ICrmServiceProvider crmServiceProvider)
+        {
+            return new RegistrationDeployer(ComponentRegistration, crmServiceProvider);
         }
 
         public static ComponentRegistrationBuilder CreateRegistration()

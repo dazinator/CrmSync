@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmSync", "CrmSync\CrmSync.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmSync.Tests", "CrmSync.Tests\CrmSync.Tests.csproj", "{7A04B36B-2E15-4EA2-8280-35D35D53C1C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmSync.CrmPlugin", "CrmSync.Plugin\CrmSync.CrmPlugin.csproj", "{87D7865D-D2B3-4871-84C3-156761328A95}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,12 @@ Global
 		{7A04B36B-2E15-4EA2-8280-35D35D53C1C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A04B36B-2E15-4EA2-8280-35D35D53C1C4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7A04B36B-2E15-4EA2-8280-35D35D53C1C4}.Release|x64.ActiveCfg = Release|Any CPU
+		{87D7865D-D2B3-4871-84C3-156761328A95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87D7865D-D2B3-4871-84C3-156761328A95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87D7865D-D2B3-4871-84C3-156761328A95}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{87D7865D-D2B3-4871-84C3-156761328A95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87D7865D-D2B3-4871-84C3-156761328A95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87D7865D-D2B3-4871-84C3-156761328A95}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

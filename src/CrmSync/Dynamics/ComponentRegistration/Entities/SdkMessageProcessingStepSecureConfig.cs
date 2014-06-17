@@ -1,4 +1,4 @@
-namespace CrmSync.Dynamics.Entities
+namespace CrmSync.Dynamics.ComponentRegistration.Entities
 {
     /// <summary>
     /// Non-public custom configuration that is passed to a plug-in's constructor.

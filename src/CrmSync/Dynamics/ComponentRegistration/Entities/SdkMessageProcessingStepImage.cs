@@ -1,4 +1,4 @@
-namespace CrmSync.Dynamics.Entities
+namespace CrmSync.Dynamics.ComponentRegistration.Entities
 {
     /// <summary>
     /// Copy of an entity's attributes before or after the core system operation.

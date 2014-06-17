@@ -1,4 +1,4 @@
-namespace CrmSync.Dynamics.Entities
+namespace CrmSync.Dynamics.ComponentRegistration.Entities
 {
     /// <summary>
     /// Stage in the execution pipeline that a plug-in is to execute.

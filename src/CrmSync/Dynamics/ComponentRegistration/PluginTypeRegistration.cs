@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using CrmSync.Dynamics.Entities;
+using CrmSync.Dynamics.ComponentRegistration.Entities;
 using Microsoft.Xrm.Sdk;
 
 namespace CrmSync.Dynamics.ComponentRegistration

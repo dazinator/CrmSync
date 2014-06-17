@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
-using CrmSync.Dynamics.Entities;
+using CrmSync.Dynamics.ComponentRegistration.Entities;
 using Microsoft.Xrm.Client.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;

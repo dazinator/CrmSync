@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xrm.Sdk;
 
-namespace CrmSync
+namespace CrmSync.Plugin
 {
     public abstract class BasePlugin : IPlugin
     {

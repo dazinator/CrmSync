@@ -1,4 +1,4 @@
-﻿namespace CrmSync.Dynamics.ComponentRegistration
+﻿namespace CrmSync.Dynamics.ComponentRegistration.Enums
 {
     public enum SdkMessageNames
     {

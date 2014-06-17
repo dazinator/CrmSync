@@ -1,4 +1,4 @@
-namespace CrmSync.Dynamics.Entities
+namespace CrmSync.Dynamics.ComponentRegistration.Entities
 {
     /// <summary>
     /// Type that inherits from the IPlugin interface and is contained within a plug-in assembly.

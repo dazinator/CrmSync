@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using CrmSync.Dynamics;
+using CrmSync.Dynamics.ComponentRegistration;
+using CrmSync.Dynamics.ComponentRegistration.Enums;
 using CrmSync.Dynamics.Metadata;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using NUnit.Framework;
+using CrmSync.Plugin;
 
 namespace CrmSync.Tests.SystemTests
 {
@@ -14,11 +20,14 @@ namespace CrmSync.Tests.SystemTests
     public class CrmSyncPluginSystemTests
     {
         public const string TestEntityName = "crmsync_testpluginentity";
+        public const string NameAttributeName = "crmsync_testpluginentityname";
 
         public CrmSyncPluginSystemTests()
         {
 
         }
+
+        public RegistrationInfo PluginRegistrationInfo { get; set; }
 
         [TestFixtureSetUp]
         public void Setup()
@@ -32,26 +41,49 @@ namespace CrmSync.Tests.SystemTests
 
         }
 
-        private void RegisterPlugin(CrmServiceProvider serviceProvider)
-        {
-            //PluginAssembly, PluginType, SdkMessageProcessingStep, and SdkMessageProcessingStepImage. 
-            using (var orgService = (OrganizationServiceContext)serviceProvider.GetOrganisationService())
-            {
-                var pluginAssemblies = (from p in orgService.CreateQuery("pluginassembly") select p).ToList();
-                var pluginTypes = (from p in orgService.CreateQuery("plugintype") select p).ToList();
-                var sdkMessageProcessingStep = (from p in orgService.CreateQuery("sdkmessageprocessingstep") select p).ToList();
-                var sdkMessageProcessingStepImage = (from p in orgService.CreateQuery("sdkmessageprocessingstepimage") select p).ToList();
-                var sdkMessages = (from p in orgService.CreateQuery("sdkmessage") select p).ToList();
-
-                
-
-            }
-        }
 
 
         [Test]
         public void Should_Set_Custom_Row_Version_Attribute()
         {
+            // create a new entity.
+
+            var service = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
+            using (var orgServiceContext = (OrganizationServiceContext)service.GetOrganisationService())
+            {
+                // Create a new entity record which should fire plugin in crm.
+                var testEntity = new Entity(TestEntityName);
+                testEntity[NameAttributeName] = "you shall pass!";
+                var orgService = (IOrganizationService)orgServiceContext;
+                var newRecordId = orgService.Create(testEntity);
+
+
+                Console.WriteLine("Record created: " + newRecordId);
+
+                // pull back the record and verify the plugin captured the creation version of the record.
+                var ent = orgService.Retrieve(TestEntityName, newRecordId, new ColumnSet(CrmSyncChangeTrackerPlugin.RowVersionAttributeName, CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName));
+
+                Assert.That(ent.Attributes.ContainsKey(CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName));
+                Assert.That(ent.Attributes.ContainsKey(CrmSyncChangeTrackerPlugin.RowVersionAttributeName));
+
+                var rowVersion = (long)ent.Attributes[CrmSyncChangeTrackerPlugin.RowVersionAttributeName];
+                Assert.That(rowVersion, Is.GreaterThan(0));
+
+                var capturedCreationVersion = System.Convert.ToInt64((decimal)ent.Attributes[CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName]);
+
+                Assert.That(capturedCreationVersion, Is.GreaterThan(0));
+                // the row version is incremented on every modification of the record - as the plugin modified it when saving the creation version this causes the
+                // row version to be atleast 1 greater than creation version.
+                // If many tests are executing in dynamics at the same time then the rowversion could be incrememnted by more than 1 as its globally unique.
+                // so we make an allowance here of max 5 difference.
+                Assert.That(rowVersion - capturedCreationVersion, Is.LessThan(5));
+                Assert.That(rowVersion - capturedCreationVersion, Is.GreaterThan(-1));
+
+                Console.WriteLine("Creation version is: " + capturedCreationVersion);
+                Console.WriteLine("Row version is: " + rowVersion);
+
+            }
+
 
 
         }
@@ -61,8 +93,36 @@ namespace CrmSync.Tests.SystemTests
         {
             // Ensure custom test entity removed.
             var service = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
-            DeleteTestEntity(service);
 
+            UnregisterPlugin(service);
+            DeleteTestEntity(service);
+        }
+
+        private void RegisterPlugin(CrmServiceProvider serviceProvider)
+        {
+
+            var deployer = ComponentRegistrationBuilder.CreateRegistration()
+                                                           .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>()
+                                                            .Described("Test plugin assembly")
+                                                            .RunsInSandboxMode()
+                                                            .LocatedInDatabase()
+                                                           .HasPlugin<CrmSyncChangeTrackerPlugin>()
+                                                            .ExecutesOn(SdkMessageNames.Create, TestEntityName)
+                                                            .Synchronously()
+                                                            .PostOperation()
+                                                            .OnlyOnServer()
+                                                           .DeployTo(serviceProvider);
+
+            PluginRegistrationInfo = deployer.Deploy();
+            if (!PluginRegistrationInfo.Success)
+            {
+                Assert.Fail("Registration failed..");
+            }
+        }
+
+        private void UnregisterPlugin(CrmServiceProvider service)
+        {
+            PluginRegistrationInfo.Undeploy();
         }
 
         /// <summary>
@@ -97,7 +157,7 @@ namespace CrmSync.Tests.SystemTests
                 if (response == null || response.EntityMetadata == null)
                 {
                     var createRequest = new CreateEntityRequest();
-                    string nameAttributeName = "crmsync_testpluginentityname";
+
 
                     var entityBuilder = EntityConstruction.ConstructEntity(TestEntityName);
                     createRequest.Entity = entityBuilder
@@ -105,22 +165,22 @@ namespace CrmSync.Tests.SystemTests
                              .DisplayCollectionName("Sync Plugin Test Entities")
                              .DisplayName("Sync Plugin Test")
                              .WithAttributes()
-                             .StringAttribute(nameAttributeName, "name", "name attribute", AttributeRequiredLevel.Recommended, 255, StringFormat.Text)
+                             .StringAttribute(NameAttributeName, "name", "name attribute", AttributeRequiredLevel.Recommended, 255, StringFormat.Text)
                              .DecimalAttribute(CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName,
                                               "CrmSync Creation Version",
                                               "The RowVersion of the record when it was created.",
-                                              AttributeRequiredLevel.None,0,null,0)
+                                              AttributeRequiredLevel.None, 0, null, 0)
                              .MetaDataBuilder.Build();
 
-                  //  createRequest.HasActivities = false;
-                  //  createRequest.HasNotes = false;
+                    //  createRequest.HasActivities = false;
+                    //  createRequest.HasNotes = false;
                     createRequest.PrimaryAttribute = (StringAttributeMetadata)entityBuilder.AttributeBuilder.Attributes[0];
-                  //  createRequest.SolutionUniqueName =
+                    //  createRequest.SolutionUniqueName =
 
                     try
                     {
                         var createResponse = (CreateEntityResponse)orgService.Execute(createRequest);
-                        foreach (var att in entityBuilder.AttributeBuilder.Attributes.Where(a => a.SchemaName != nameAttributeName))
+                        foreach (var att in entityBuilder.AttributeBuilder.Attributes.Where(a => a.SchemaName != NameAttributeName))
                         {
                             var createAttributeRequest = new CreateAttributeRequest
                             {
@@ -141,7 +201,7 @@ namespace CrmSync.Tests.SystemTests
 
             }
         }
-            
+
         /// <summary>
         /// Ensures test entity is deleted from CRM.
         /// </summary>
@@ -153,7 +213,6 @@ namespace CrmSync.Tests.SystemTests
                 // Check for test entity - if it doesn't exist then create it.
                 var request = new DeleteEntityRequest();
                 request.LogicalName = TestEntityName;
-
                 var response = (DeleteEntityResponse)orgService.Execute(request);
                 if (response == null)
                 {

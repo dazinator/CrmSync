@@ -1,4 +1,5 @@
 ﻿using System;
+using CrmSync.Plugin;
 using Microsoft.Xrm.Sdk;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;

@@ -1,4 +1,5 @@
-﻿using CrmSync.Dynamics.Entities;
+﻿using CrmSync.Dynamics.ComponentRegistration.Entities;
+using CrmSync.Dynamics.ComponentRegistration.Enums;
 using Microsoft.Xrm.Sdk;
 
 namespace CrmSync.Dynamics.ComponentRegistration

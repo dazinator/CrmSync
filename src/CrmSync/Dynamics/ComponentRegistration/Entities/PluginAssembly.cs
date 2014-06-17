@@ -1,6 +1,4 @@
-using System.Collections.ObjectModel;
-
-namespace CrmSync.Dynamics.Entities
+namespace CrmSync.Dynamics.ComponentRegistration.Entities
 {
     /// <summary>
     /// Assembly that contains one or more plug-in types.

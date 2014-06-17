@@ -120,9 +120,14 @@ namespace CrmSync.Dynamics.ComponentRegistration
             return this;
         }
         
-        public ComponentRegistration Build()
+        public IRegistrationDeployer DeployTo(string orgConnectionString)
         {
-            return PluginTypeOptions.PluginAssemblyOptions.RegistrationOptions.Build();
+            return PluginTypeOptions.PluginAssemblyOptions.RegistrationOptions.DeployTo(orgConnectionString);
+        }
+
+        public IRegistrationDeployer DeployTo(ICrmServiceProvider crmserviceProvider)
+        {
+            return PluginTypeOptions.PluginAssemblyOptions.RegistrationOptions.DeployTo(crmserviceProvider);
         }
 
 

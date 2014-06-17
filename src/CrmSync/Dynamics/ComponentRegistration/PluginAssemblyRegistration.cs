@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using CrmSync.Dynamics.Entities;
+using CrmSync.Dynamics.ComponentRegistration.Entities;
 
 namespace CrmSync.Dynamics.ComponentRegistration
 {
