@@ -16,7 +16,7 @@ namespace CrmSync.Tests
         }
 
         [Test]
-        public void Should_Set_Custom_Row_Version_Attribute()
+        public void Crm_Plugin_Should_Capture_Creation_Version()
         {
             var sut = new TestCrmSyncChangeTrackerPlugin();
             sut.Execute(null);
@@ -32,7 +32,7 @@ namespace CrmSync.Tests
             var rowVersion = (long)updatedEntity.Attributes[CrmSyncChangeTrackerPlugin.RowVersionAttributeName];
             Assert.That(rowVersion, Is.GreaterThan(0));
 
-            var capturedCreationVersion = (long)updatedEntity.Attributes[CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName];
+            var capturedCreationVersion = (decimal)updatedEntity.Attributes[CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName];
 
             Assert.That(rowVersion, Is.EqualTo(capturedCreationVersion));
 

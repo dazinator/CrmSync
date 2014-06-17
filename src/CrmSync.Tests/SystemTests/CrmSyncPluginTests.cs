@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using CrmDeploy;
+using CrmDeploy.Enums;
 using CrmSync.Dynamics;
-using CrmSync.Dynamics.ComponentRegistration;
-using CrmSync.Dynamics.ComponentRegistration.Enums;
 using CrmSync.Dynamics.Metadata;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
@@ -16,6 +16,7 @@ using CrmSync.Plugin;
 namespace CrmSync.Tests.SystemTests
 {
     [Category("System")]
+    [Category("Crm Plugin")]
     [TestFixture]
     public class CrmSyncPluginSystemTests
     {
@@ -41,10 +42,8 @@ namespace CrmSync.Tests.SystemTests
 
         }
 
-
-
         [Test]
-        public void Should_Set_Custom_Row_Version_Attribute()
+        public void Crm_Plugin_Captures_Creation_Version_On_Create_Of_Entity()
         {
             // create a new entity.
 
@@ -100,18 +99,18 @@ namespace CrmSync.Tests.SystemTests
 
         private void RegisterPlugin(CrmServiceProvider serviceProvider)
         {
+            var orgConnectionString = ConfigurationManager.ConnectionStrings["CrmOrganisationService"];
 
-            var deployer = ComponentRegistrationBuilder.CreateRegistration()
-                                                           .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>()
-                                                            .Described("Test plugin assembly")
+            var deployer = DeploymentBuilder.CreateDeployment()
+                                                           .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>("Test plugin assembly")
                                                             .RunsInSandboxMode()
-                                                            .LocatedInDatabase()
+                                                            .RegisterInDatabase()
                                                            .HasPlugin<CrmSyncChangeTrackerPlugin>()
-                                                            .ExecutesOn(SdkMessageNames.Create, TestEntityName)
+                                                            .WhichExecutesOn(SdkMessageNames.Create, TestEntityName)
                                                             .Synchronously()
                                                             .PostOperation()
-                                                            .OnlyOnServer()
-                                                           .DeployTo(serviceProvider);
+                                                            .OnlyOnCrmServer()
+                                                           .DeployTo(orgConnectionString.ConnectionString);
 
             PluginRegistrationInfo = deployer.Deploy();
             if (!PluginRegistrationInfo.Success)

@@ -1,25 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Reflection;
+﻿using System.Configuration;
+using CrmDeploy;
+using CrmDeploy.Enums;
 using CrmSync.Dynamics;
-using CrmSync.Dynamics.ComponentRegistration;
-using CrmSync.Dynamics.ComponentRegistration.Enums;
-using CrmSync.Dynamics.Metadata;
 using CrmSync.Plugin;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
-using Microsoft.Xrm.Sdk.Messages;
 using NUnit.Framework;
 
 namespace CrmSync.Tests.SystemTests
 {
     [Category("System")]
+    [Category("Crm Plugin")]
     [TestFixture]
     public class RegisterPluginSystemTests
     {
-
         public RegistrationInfo RegistrationInfo = null;
 
         public RegisterPluginSystemTests()
@@ -34,26 +26,23 @@ namespace CrmSync.Tests.SystemTests
 
         }
 
-
-
         [Test]
-        public void RegisterPlugin()
+        public void Can_Register_Crm_Plugin()
         {
             var serviceProvider = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
             //PluginAssembly, PluginType, SdkMessageProcessingStep, and SdkMessageProcessingStepImage. 
 
             var crmOrgConnectionString = ConfigurationManager.ConnectionStrings["CrmOrganisationService"];
 
-            var deployer = ComponentRegistrationBuilder.CreateRegistration()
-                                                           .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>()
-                                                            .Described("Test plugin assembly")
-                                                            .RunsInSandboxMode()
-                                                            .LocatedInDatabase()
+            var deployer = DeploymentBuilder.CreateDeployment()
+                                                           .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>("Test plugin assembly")
+                                                           .RunsInSandboxMode()
+                                                           .RegisterInDatabase()
                                                            .HasPlugin<CrmSyncChangeTrackerPlugin>()
-                                                            .ExecutesOn(SdkMessageNames.Create, "contact")
+                                                            .WhichExecutesOn(SdkMessageNames.Create, "contact")
                                                             .Synchronously()
                                                             .PostOperation()
-                                                            .OnlyOnServer()
+                                                            .OnlyOnCrmServer()
                                                            .DeployTo(crmOrgConnectionString.ConnectionString);
 
             RegistrationInfo = deployer.Deploy();

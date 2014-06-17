@@ -69,6 +69,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\CrmAdo.1.0.9.0\lib\net45\CrmAdo.dll</HintPath>
     </Reference>
+    <Reference Include="CrmDeploy">
+      <HintPath>..\..\lib\CrmDeploy.1.0.1.0\lib\net45\CrmDeploy.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
@@ -164,36 +167,10 @@
     <Compile Include="AnchorDbCommandAdapter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Dynamics\ComponentRegistration\ComponentRegistration.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\IRegistrationUpdater.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\PluginAssemblyOptionsBuilder.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\PluginAssemblyRegistration.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\ComponentRegistrationBuilder.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Enums\AssemblySourceType.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Enums\ImageMerge.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Enums\ImageType.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Enums\IsolationMode.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Enums\PluginStepInvocationSource.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Enums\PluginStepMode.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Enums\PluginStepStage.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Enums\PluginStepDeployment.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\PluginHelper.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\PluginStepOptionsBuilder.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\PluginStepRegistration.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\PluginTypeOptionsBuilder.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\PluginTypeRegistration.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\RegistrationInfo.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\RegistrationDeployer.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Enums\SdkMessageNames.cs" />
     <Compile Include="Dynamics\CrmClientCredentialsProvider.cs" />
     <Compile Include="Dynamics\CrmConnectionProvider.cs" />
     <Compile Include="Dynamics\CrmServiceProvider.cs" />
     <Compile Include="Dynamics\DynamicsAttributeTypeProvider.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Entities\PluginAssembly.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Entities\PluginType.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Entities\SdkMessageProcessingStep.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Entities\SdkMessageProcessingStepImage.cs" />
-    <Compile Include="Dynamics\ComponentRegistration\Entities\SdkMessageProcessingStepSecureConfig.cs" />
     <Compile Include="Dynamics\EntityBuilder.cs" />
     <Compile Include="Dynamics\EntityExists.cs" />
     <Compile Include="Dynamics\EntityUtils.cs" />

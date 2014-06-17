@@ -41,6 +41,9 @@
     <Reference Include="CrmAdo">
       <HintPath>..\..\lib\CrmAdo.1.0.9.0\lib\net45\CrmAdo.dll</HintPath>
     </Reference>
+    <Reference Include="CrmDeploy">
+      <HintPath>..\..\lib\CrmDeploy.1.0.1.0\lib\net45\CrmDeploy.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
@@ -135,7 +138,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CrmSyncPluginTests.cs" />
-    <Compile Include="SystemTests\SdkMessageTests.cs" />
     <Compile Include="SystemTests\RegisterPluginSystemTests.cs" />
     <Compile Include="SystemTests\CrmSyncPluginTests.cs" />
     <Compile Include="MockOrgService.cs" />
