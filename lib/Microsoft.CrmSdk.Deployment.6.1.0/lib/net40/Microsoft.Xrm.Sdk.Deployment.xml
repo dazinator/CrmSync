@@ -870,9 +870,15 @@ The web application server domain.</returns>
 			<summary>Gets or sets whether the solutions marketplace is enabled.</summary>
 			<returns>Type: Returns_Boolean</returns>
 		</member>
+		<member name="T:Microsoft.Xrm.Sdk.Deployment.MonitoringSettings">
+			<summary>Contains settings used to manage or configure the monitoring service and the tests executed by the service.</summary>
+		</member>
+		<member name="M:Microsoft.Xrm.Sdk.Deployment.MonitoringSettings.#ctor">
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Deployment.MonitoringSettings"></see> class.</summary>
+		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.MonitoringSettings.CertificateLifetimeNotificationThreshold">
-			<summary>Gets or sets the </summary>
-			<returns>Type: Returns_Int32.</returns>
+			<summary>Gets or sets the threshold of the certificate lifetime remaining at which to begin reporting expiration notifications.</summary>
+			<returns>Type: Returns_Int32The threshold of the certificate lifetime remaining at which to begin reporting expiration notifications. Specified as an integral percentage.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.MonitoringSettings.ResultsToKeep">
 			<summary>Gets or sets the number of monitoring results to keep</summary>
@@ -1251,213 +1257,219 @@ The version number of the server.</returns>
 		<member name="F:Microsoft.Xrm.Sdk.Deployment.ServerRoles.WitnessServer">
 			<summary>Internal. Value = 0x80.</summary>
 		</member>
+		<member name="M:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.#ctor">
+			<summary>Initializes the <see cref="T:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings"></see> class.</summary>
+		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.ActiveMailboxMaximumBackoffForACT">
 			<summary>Defines the maximum duration, in seconds, after which the service checks an active mailbox for appointments, contacts, or tasks.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The maximum duration.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.ActiveMailboxMinimumBackoffForACT">
 			<summary>Defines the minimum duration, in seconds, after which the service checks an active mailbox for appointments, contacts, or tasks.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The minimum duration.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.IdleMailboxMaximumBackoffForACT">
 			<summary>Defines the maximum duration, in seconds, after which the service checks an idle mailbox for appointments, contacts, or tasks.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The maximum duration.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.IdleMailboxMinimumBackoffForACT">
 			<summary>Defines the minimum duration, in seconds, after which the service checks an idle mailbox for appointments, contacts, or tasks.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The minimum duration.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.MailboxBackoffOnTimeoutForACT">
 			<summary>Defines the duration, in seconds, to postpone synchronizing appointments, contacts, or tasks for a mailbox on an Exchange server request time-out.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The duration.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.MailboxBackoffOnTransientErrorForACT">
 			<summary>Defines the duration, in seconds, to postpone synchronizing appointments, contacts, or tasks for a mailbox after encountering a transient error.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The duration.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.MaximumItemsPerCycleForACT">
 			<summary>Defines the maximum number of appointments, contacts, or tasks processed by an Exchange server in a cycle.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The maximum number.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.MaximumMailboxTransientFailuresForACT">
 			<summary>Defines the maximum number of transient failures that can occur before a mailbox is disabled for synchronizing appointments, contacts, or tasks.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The maximum number.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.MaximumSynchronizationAttemptsForACT">
 			<summary>Defines the maximum number of attempts allowed to synchronize an appointment, contact, or task.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The maximum number.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncACTSettings.RetrievalBatchSizeForACT">
 			<summary>Defines the batch size for retrieving appointments, contacts, tasks from an Exchange server.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The batch size.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.ActiveMailboxMaximumBackoff">
 			<summary>Defines the maximum duration, in seconds, after which the service checks an active mailbox for the user’s email.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The maximum duration.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.ActiveMailboxMinimumBackoff">
 			<summary>Defines the minimum duration, in seconds, after which the service checks an active mailbox for the user’s email.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32The minimum duration.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.AllowADBasedAuthenticationProtocols">
-			<summary>Allows Active Directory based authentication to connect with email servers. The default value for Microsoft Dynamics CRM Online is False, and for on-premises Microsoft Dynamics CRM is True.</summary>
-			<returns>Returns <see cref="T:System.Boolean"></see>.</returns>
+			<summary>Allows pn_Active_Directory based authentication to connect with email servers. The default value for pn_CRM_Online is false, and for pn_microsoftcrm on premises the default value is true.</summary>
+			<returns>Type: Returns_Boolean.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.AllowBasicAuthenticationOnNonSecureChannel">
-			<summary>Controls whether Microsoft Dynamics CRM is allowed to connect to an email server on a non-secure channel using Basic/Clear Text authentication, for both outgoing and incoming email.</summary>
-			<returns>Returns <see cref="T:System.Boolean"></see>.</returns>
+			<summary>Controls whether pn_microsoftcrm is allowed to connect to an email server on a non-secure channel using Basic/Clear Text authentication, for both outgoing and incoming email.</summary>
+			<returns>Type: Returns_Boolean.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.AllowCredentialsEntryViaNonSecureChannels">
 			<summary>Allows entering the user credentials via a non-secure channel.</summary>
-			<returns>Returns <see cref="T:System.Boolean"></see>.</returns>
+			<returns>Type: Returns_Boolean.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.AllowNonSSLEmail">
-			<summary>Controls whether Microsoft Dynamics CRM is allowed to connect to an email server on a non-secure channel, for both outgoing and incoming email.</summary>
-			<returns>Returns <see cref="T:System.Boolean"></see>.</returns>
+			<summary>Controls whether pn_microsoftcrm is allowed to connect to an email server on a non-secure channel, for both outgoing and incoming email.</summary>
+			<returns>Type: Returns_Boolean.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.EmailRouterMigrationMaxParallelRuns">
 			<summary>Defines the maximum number of parallel migration processes on the server for an organization. Any migration request exceeding this value is rejected.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.ExchangeAutoDiscoverBulkDiscoveryBatchSize">
 			<summary>Defines the maximum batch size for discovering Exchange Web Services URL in a single request.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.ExchangeAutoDiscoverMaxRedirects">
 			<summary>Defines the maximum redirects honored in an Exchange Web Services autodiscover request.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.IdleMailboxMaximumBackoff">
 			<summary>Defines the maximum duration, in seconds, after which the service checks an idle mailbox for the user’s email.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.IdleMailboxMinimumBackoff">
 			<summary>Defines the minimum duration, in seconds, after which the service checks an idle mailbox for the user’s email.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.IncomingEmailExchangeEmailRetrievalBatchSize">
 			<summary>Defines the email retrieval batch size of the Exchange server.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.IncomingEmailMaximumSizeLimit">
 			<summary>Defines the maximum limit, in bytes, for the incoming message size. This settings applies to email received from an Exchange or POP3 email server type.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.IncomingMaximumEmailsPerCycle">
 			<summary>Defines the maximum number of messages that an incoming provider can process in a cycle.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.LogEwsResponseHttpHeaders">
-			<summary>Enables logging of Exchange Web Services response headers in Microsoft Dynamics CRM traces.</summary>
-			<returns>Returns <see cref="T:System.Boolean"></see>.</returns>
+			<summary>Enables logging of Exchange Web Services response headers in pn_microsoftcrm traces.</summary>
+			<returns>Type: Returns_Boolean.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.MailboxBackoffOnTimeout">
 			<summary>Defines the duration, in seconds, that sending or receiving email is postponed for a mailbox when a request to the email server times out.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.MailboxBackoffOnTransientError">
 			<summary>Defines the duration, in seconds, to postpone sending or receiving email for a mailbox after a transient error occurs.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.MailboxSendBackoffOnSubmissionQuotaExceeded">
 			<summary>Defines the duration, in minutes, that sending email from a mailbox is postponed when the Exchange submission quota is exceeded.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.MaximumEmailDeliveryAttempts">
 			<summary>Defines the maximum number of attempts that can be made to send an email.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.MaximumExchangeWebResponseSize">
 			<summary>Defines the maximum size of response, in KB, from Exchange using Exchange Web Services.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.MaxMailboxTransientFailures">
 			<summary>Defines the number of transient failures that can occur before the mailbox is automatically disabled.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.MessageIDCacheCapacity">
 			<summary>Defines the capacity of the message ID cache for server-side synchronization.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.MessageIDCacheRetentionTime">
 			<summary>Defines the time, in minutes, that the email message ID is retained in the cache.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.PendingEmailsRetryInterval">
 			<summary>Defines the interval in minutes after which an email in pending send status is picked up for retry.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.ProcessEmailSinceMaximumDaysAllowed">
 			<summary>Defines the maximum number of days before the current date or time that server-side synchronization can be configured to process email. This information is provided in an email server profile record in pn_microsoftcrm.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.SendingEmailsRetryInterval">
 			<summary>Defines the interval, in minutes, after which an email in sending status is picked up for retry.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncEmailSettings.TestEmailConfigurationRetryInterval">
 			<summary>Defines the interval, in minutes, to attempt the email test configuration again.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
+		</member>
+		<member name="M:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.#ctor">
+			<summary>Initializes the <see cref="T:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.ActivitiesDequedPerEvent">
 			<summary>Controls the number of activities to be removed from a queue per asynchronous event.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32 .</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.ActivityQueueItemsInMemoryHigh">
 			<summary>Defines the upper limit of the number of activity batches held in memory at any point of time.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.ActivityQueueItemsInMemoryLow">
 			<summary>Defines the lower limit beyond which the service will stop removing activity batches held in memory from the queue.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.ActivityQueueMaximumThreadsPercent">
 			<summary>Defines the maximum percentage of worker threads to be used for running asynchronous operations.</summary>
-			<returns>Returns <see cref="T:System.Double"></see>.</returns>
+			<returns>Type: Returns_Double.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.ActivityQueueMaximumThreadsPerCPU">
 			<summary>Defines the maximum number of threads per CPU to be used for running asynchronous operations.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.ActivityQueueSelectInterval">
 			<summary>Defines how frequently to poll the organization database activity pointer table to check for any new outgoing emails that have to be sent.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.MailboxesDequedPerEvent">
 			<summary>Controls the number of mailboxes to be removed from a queue per asynchronous event.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.MailboxQueueItemsInMemoryHigh">
 			<summary>Defines the upper limit on the number of mailbox batches held in memory at any point in time.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.MailboxQueueItemsInMemoryLow">
 			<summary>Defines the limit on the number of mailbox batches held in memory, beyond which the service will stop removing more mailboxes from the queue.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.MailboxQueueMaximumThreadsPercent">
 			<summary>Defines the maximum percentage of worker threads for running asynchronous operations.</summary>
-			<returns>Returns <see cref="T:System.Double"></see>.</returns>
+			<returns>Type: Returns_Double.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.MailboxQueueMaximumThreadsPerCPU">
 			<summary>Defines the maximum number of threads per CPU for running asynchronous operations.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.MailboxQueueSelectInterval">
 			<summary>Defines the recurrence period, in seconds, of removing mailboxes from the queue in the database.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.MailboxRetryDelay">
 			<summary>Defines the number of minutes after which a locked mailbox record is checked again for incoming email processing in case of a service crash.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.MaximumActivitiesPerSelect">
 			<summary>Controls the maximum number of activities that can be removed from the queue for an organization per select interval.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ServerSideSyncQueueSettings.WaitingOperationTimeout">
 			<summary>Defines the maximum time allowed for any call to the email server to complete. If a response isn’t received from the email server within this time period, the request is aborted. This setting applies to both Exchange and POP3/SMTP.</summary>
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<returns>Type: Returns_Int32.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Deployment.ServerState">
 			<summary>Describes the state of a server.</summary>
@@ -1499,7 +1511,7 @@ The version number of the server.</returns>
 			<summary>Contains information about service throttling.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Deployment.ThrottleSettings.#ctor">
-			<summary>Initializes a new instance of the ThrottleSettings class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Deployment.ThrottleSettings"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ThrottleSettings.ExecuteAsyncMaxConnectionsPerServer">
 			<summary>Gets or sets the maximum number of concurrent asynchronous execute operations per organization.</summary>
@@ -1540,6 +1552,14 @@ The version number of the server.</returns>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ThrottleSettings.MaxBackgroundSendEmailRequestsPerServer">
 			<summary>Gets or sets the server setting to control the maximum number of background email send operations.</summary>
 			<returns>Type: Returns_Int32The maximum number of background email send operations.</returns>
+		</member>
+		<member name="P:Microsoft.Xrm.Sdk.Deployment.ThrottleSettings.MaxSharepointThreadsperOrganisation">
+			<summary>Gets or sets the maximum number of pn_ms_SharePoint_long threads allowed per organization.</summary>
+			<returns>Type: Returns_Int32The maximum number of threads allowed.</returns>
+		</member>
+		<member name="P:Microsoft.Xrm.Sdk.Deployment.ThrottleSettings.MaxSharepointThreadsperUser">
+			<summary>Gets or sets the maximum number of pn_ms_SharePoint_long threads allowed per user.</summary>
+			<returns>Type: Returns_Int32The maximum number of threads allowed.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Deployment.ThrottleSettings.OfflineSyncMaxConnectionsPerServer">
 			<summary>Gets or sets the server setting to control the maximum number of offline sync operations.</summary>
@@ -1598,11 +1618,17 @@ The size limit of the trace file in MB.</returns>
 		<member name="F:Microsoft.Xrm.Sdk.Deployment.TrackingLicenseType.DeviceBasicCal">
 			<summary>A device basic client access license. Value = 5.</summary>
 		</member>
+		<member name="F:Microsoft.Xrm.Sdk.Deployment.TrackingLicenseType.DeviceEnterpriseCal">
+			<summary>A device enterprise client access license. Value = 6.</summary>
+		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Deployment.TrackingLicenseType.DeviceEssentialCal">
-			<summary>A device essential client access license. Value = 6.</summary>
+			<summary>A device essential client access license. Value = 13.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Deployment.TrackingLicenseType.DeviceProfessionalCal">
 			<summary>A device professional client access license. Value = 4.</summary>
+		</member>
+		<member name="F:Microsoft.Xrm.Sdk.Deployment.TrackingLicenseType.EnterpriseCal">
+			<summary>An enterprise client access license. Value = 12.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Deployment.TrackingLicenseType.EnterpriseServer">
 			<summary>An enterprise client access license (CAL). Value = 9.</summary>

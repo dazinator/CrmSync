@@ -65,16 +65,16 @@
     <Reference Include="AntiXSSLibrary">
       <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\AntiXSSLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="CrmAdo, Version=1.0.9.0, Culture=neutral, PublicKeyToken=ba966c247ee8fd34, processorArchitecture=MSIL">
+    <Reference Include="CrmAdo, Version=1.0.10.0, Culture=neutral, PublicKeyToken=ba966c247ee8fd34, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\CrmAdo.1.0.9.0\lib\net45\CrmAdo.dll</HintPath>
+      <HintPath>..\..\lib\CrmAdo.1.0.10.0\lib\net45\CrmAdo.dll</HintPath>
     </Reference>
     <Reference Include="CrmDeploy">
       <HintPath>..\..\lib\CrmDeploy.1.0.1.0\lib\net45\CrmDeploy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.1.0\lib\net40\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -121,10 +121,11 @@
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.1.0\lib\net40\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk.Deployment">
-      <HintPath>..\..\lib\Microsoft.CrmSdk.Deployment.6.0.4\lib\net40\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk.Deployment, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.Deployment.6.1.0\lib\net40\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -201,10 +202,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleClientSyncProvider.cs" />
-    <Compile Include="DynamicsCrmServerSyncProvider.cs" />
     <Compile Include="SampleStats.cs" />
-    <Compile Include="DynamicsCrmSyncAgent.cs" />
     <Compile Include="Decompile\SyncColumnMapping.cs" />
     <Compile Include="Decompile\SyncColumnMappingCollection.cs" />
     <Compile Include="Decompile\SyncExpt.cs" />
