@@ -12,11 +12,9 @@ using CrmDeploy.Enums;
 using CrmSync.Dynamics;
 using CrmSync.Dynamics.Metadata;
 using Microsoft.Synchronization.Data;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
 using NUnit.Framework;
 using CrmSync.Plugin;
 
@@ -27,12 +25,12 @@ namespace CrmSync.Tests.SystemTests
     [TestFixture]
     public class CrmSyncTests
     {
-       
+
 
         public string SqlCompactDatabaseConnectionString;
 
         public string CrmConnectionString;
-        
+
         public CrmSyncTests()
         {
 
@@ -54,7 +52,7 @@ namespace CrmSync.Tests.SystemTests
             }
 
             DeleteSqlCompactDatabase();
-           // LoadColumnInfo();
+            // LoadColumnInfo();
 
             // Ensure custom test entity present in crm.
             var service = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
@@ -73,7 +71,7 @@ namespace CrmSync.Tests.SystemTests
 
             if (dataDirectory == null)
             {
-               Assert.Fail("No data directory.");
+                Assert.Fail("No data directory.");
             }
 
             var sampleStats = new SampleStats();
@@ -92,6 +90,20 @@ namespace CrmSync.Tests.SystemTests
 
             syncStatistics = sampleSyncAgent.Synchronize();
             sampleStats.DisplayStats(syncStatistics, "third");
+
+            // assert that the client only has one record and that the server only has 1 record.
+            using (var clientConn = new SqlCeConnection(SqlCompactDatabaseConnectionString))
+            {
+                clientConn.Open();
+                using (var sqlCeCommand = clientConn.CreateCommand())
+                {
+                    sqlCeCommand.CommandText = "SELECT COUNT({0}) FROM {1}";
+                    var rowCount = (int)sqlCeCommand.ExecuteScalar();
+                    Assert.That(rowCount, Is.EqualTo(1), string.Format("Only 1 record was synchronised however {0} records ended up in the client database!", rowCount));
+                }
+                clientConn.Close();
+            }
+
 
         }
 
@@ -271,12 +283,7 @@ namespace CrmSync.Tests.SystemTests
             Console.WriteLine("{0} Rows inserted at the client", rowCount);
         }
 
-       
-
-
-
         #endregion
 
     }
-
 }

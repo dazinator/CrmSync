@@ -164,12 +164,15 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CrmSyncPluginTests.cs" />
+    <Compile Include="SystemTests\CrmSyncClient.cs" />
     <Compile Include="SystemTests\CrmSyncTests.cs" />
     <Compile Include="SystemTests\RegisterPluginSystemTests.cs" />
     <Compile Include="SystemTests\CrmSyncPluginTests.cs" />
     <Compile Include="MockOrgService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestSyncAgent.cs" />
+    <Compile Include="TestDynamicsCrmServerSyncProvider.cs" />
+    <Compile Include="TestDynamicsCrmSyncAgent.cs" />
+    <Compile Include="TestClientSyncProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -192,7 +192,7 @@
     <Compile Include="Dynamics\Metadata\IEntityMetadataRepository.cs" />
     <Compile Include="Dynamics\Metadata\InMemoryCachedCrmMetaDataProvider.cs" />
     <Compile Include="Dynamics\OrganisationDoesNotExistException.cs" />
-    <Compile Include="SelectIncrementalChangesDbCommandAdapter.cs">
+    <Compile Include="SelectIncrementalUpdatesCommand.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Decompile\IConnectionWrapper.cs" />
@@ -212,6 +212,9 @@
     </Compile>
     <Compile Include="Decompile\SyncUtil.cs" />
     <Compile Include="Decompile\TestSyncAdapter.cs" />
+    <Compile Include="SelectIncrementalCreatesCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UpdateEntityDbCommandAdapter.cs">
       <SubType>Component</SubType>
     </Compile>

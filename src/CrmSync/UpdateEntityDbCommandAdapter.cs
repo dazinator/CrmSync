@@ -25,7 +25,7 @@ namespace CrmSync
 
         public override int ExecuteNonQuery()
         {
-            Debug.WriteLine("Execute non query " + DateTime.Now + " for command text: " + this.CommandText);
+          //  Debug.WriteLine("Execute non query " + DateTime.Now + " for command text: " + this.CommandText);
             Execute();
             return 1;
         }
@@ -37,7 +37,7 @@ namespace CrmSync
 
         public override object ExecuteScalar()
         {
-            Debug.WriteLine("Execute Scalar " + DateTime.Now + " for command text: " + this.CommandText);
+           // Debug.WriteLine("Execute Scalar " + DateTime.Now + " for command text: " + this.CommandText);
             return Execute();
         }
 

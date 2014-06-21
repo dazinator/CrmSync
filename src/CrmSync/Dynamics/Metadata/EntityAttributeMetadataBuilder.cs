@@ -137,7 +137,5 @@ namespace CrmSync.Dynamics.Metadata
             this.Attributes.Add(att);
             return this;
         }
-
-        
     }
 }

@@ -8,14 +8,10 @@ using Microsoft.Synchronization.Data;
 
 namespace CrmSync
 {
-
-
-
-
     /// <summary>
-    /// Adaptor for CrmDbCommand that will enable it to cater for Sync insert commands by setting row count paramater.
+    /// Adaptor for CrmDbCommand that will enable it to cater selecting incremental changes.
     /// </summary>
-    public class SelectIncrementalChangesDbCommandAdapter : CrmDbCommand
+    public class SelectIncrementalUpdatesCommand : CrmDbCommand
     {
         // private List<string> _Log = new List<string>();
 
@@ -26,27 +22,29 @@ namespace CrmSync
         // private bool _HasExecuted = false;
 
 
-        public SelectIncrementalChangesDbCommandAdapter(CrmDbCommand wrappedCommand)
+        public SelectIncrementalUpdatesCommand(CrmDbCommand wrappedCommand)
         {
             _WrappedCommand = wrappedCommand;
         }
 
         public override int ExecuteNonQuery()
         {
-            Debug.WriteLine("Execute non query " + DateTime.Now + " for command text: " + this.CommandText);
+
             PreExecuteCheck();
 #if DEBUG
-            Console.WriteLine("Selecting incremental changes between " + this.Parameters[0].Value + " and " + this.Parameters[1].Value);
+            Console.WriteLine("Selecting incremental updates between " + this.Parameters[0].Value + " and " + this.Parameters[1].Value);
+            // Debug.WriteLine("Execute non query " + DateTime.Now + " for command text: " + this.CommandText);
 #endif
             return _WrappedCommand.ExecuteNonQuery();
         }
 
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
-            Debug.WriteLine("Execute non query " + DateTime.Now + " for command text: " + this.CommandText);
+
             PreExecuteCheck();
 #if DEBUG
-            Console.WriteLine("Selecting incremental changes between " + this.Parameters[0].Value + " and " + this.Parameters[1].Value);
+            Console.WriteLine("Selecting incremental updates between " + this.Parameters[0].Value + " and " + this.Parameters[1].Value);
+            // Debug.WriteLine("Execute non query " + DateTime.Now + " for command text: " + this.CommandText);
 #endif
 
             // On first execution, we actually get incremental inserts and updates in one.
@@ -70,7 +68,7 @@ namespace CrmSync
 
         public override object ExecuteScalar()
         {
-            Debug.WriteLine("Execute Scalar " + DateTime.Now + " for command text: " + this.CommandText);
+          //  Debug.WriteLine("Execute Scalar " + DateTime.Now + " for command text: " + this.CommandText);
             PreExecuteCheck();
             return _WrappedCommand.ExecuteScalar();
         }
@@ -113,7 +111,7 @@ namespace CrmSync
         {
             base.Dispose(disposing);
             // also dispose of wrapped command.
-            Debug.WriteLine("disposing of wrapped command");
+            //  Debug.WriteLine("disposing of wrapped command");
             _WrappedCommand.Dispose();
         }
     }

@@ -8,17 +8,18 @@ namespace CrmSync.Plugin
     {
         public CrmSyncChangeTrackerPlugin()
         {
-            
+
         }
         // public const string PluginName = "CrmSyncChangeTrackerPlugin";
 
         public const string RowVersionAttributeName = "versionnumber";
         public const string CreatedRowVersionAttributeName = "crmsync_createdversionnumber";
+        public static Type CreationVersionColumnType = typeof(decimal);
 
         protected override void Execute()
         {
             EnsureTransaction();
-           
+
             var targetEntity = EnsureTargetEntity();
             IOrganizationService orgService = null;
 

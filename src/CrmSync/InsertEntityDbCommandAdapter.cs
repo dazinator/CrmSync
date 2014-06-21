@@ -25,7 +25,7 @@ namespace CrmSync
 
         public override int ExecuteNonQuery()
         {
-            Debug.WriteLine("Execute non query " + DateTime.Now + " for command text: " + this.CommandText);
+          //  Debug.WriteLine("Execute non query " + DateTime.Now + " for command text: " + this.CommandText);
 
 #if DEBUG
             Console.Write("Inserting entity into CRM. ");
@@ -49,7 +49,7 @@ namespace CrmSync
 
         public override object ExecuteScalar()
         {
-            Debug.WriteLine("Execute Scalar " + DateTime.Now + " for command text: " + this.CommandText);
+           // Debug.WriteLine("Execute Scalar " + DateTime.Now + " for command text: " + this.CommandText);
             var rowCount = _WrappedCommand.ExecuteNonQuery();
             var param = this.Parameters["@" + SyncSession.SyncRowCount];
             Debug.WriteLine("insert row count is " + rowCount);
