@@ -13,9 +13,9 @@ namespace CrmSync.Tests
     public class TestDynamicsCrmServerSyncProvider : DbServerSyncProvider
     {
 
-        public const string TestEntityName = "crmsync_testpluginentity";
-        public const string NameAttributeName = "crmsync_testpluginentityname";
-        public const string IdAttributeName = "crmsync_testpluginentityid";
+        public const string TestEntityName = "crmsync_atestpluginentity";
+        public const string NameAttributeName = "crmsync_atestpluginentityname";
+        public const string IdAttributeName = "crmsync_atestpluginentityid";
 
         public static Dictionary<string, DbType> AllColumnInfo = new Dictionary<string, DbType>();
         public static Dictionary<string, DbType> SelectColumns = new Dictionary<string, DbType>();

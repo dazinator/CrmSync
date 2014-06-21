@@ -11,6 +11,7 @@ using CrmDeploy;
 using CrmDeploy.Enums;
 using CrmSync.Dynamics;
 using CrmSync.Dynamics.Metadata;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Synchronization.Data;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
@@ -80,6 +81,22 @@ namespace CrmSync.Tests.SystemTests
             SyncStatistics syncStatistics = sampleSyncAgent.Synchronize();
             sampleStats.DisplayStats(syncStatistics, "initial");
 
+            // get number of existing records.
+            // assert that the client only has one record and that the server only has 1 record.
+            int existingCount = 0;
+            using (var clientConn = new SqlCeConnection(SqlCompactDatabaseConnectionString))
+            {
+                clientConn.Open();
+                using (var sqlCeCommand = clientConn.CreateCommand())
+                {
+                    sqlCeCommand.CommandText = string.Format("SELECT COUNT({0}) FROM {1}", TestDynamicsCrmServerSyncProvider.IdAttributeName, TestDynamicsCrmServerSyncProvider.TestEntityName);
+                    existingCount = (int)sqlCeCommand.ExecuteScalar();
+                   // Assert.That(rowCount, Is.EqualTo(1), string.Format("Only 1 record was synchronised however {0} records ended up in the client database!", rowCount));
+                }
+                clientConn.Close();
+            }
+
+
             //Make changes on the server and client.
             // InsertNewRecordOnServer();
             InsertNewRecordOnClient();
@@ -97,9 +114,9 @@ namespace CrmSync.Tests.SystemTests
                 clientConn.Open();
                 using (var sqlCeCommand = clientConn.CreateCommand())
                 {
-                    sqlCeCommand.CommandText = "SELECT COUNT({0}) FROM {1}";
+                    sqlCeCommand.CommandText = string.Format("SELECT COUNT({0}) FROM {1}", TestDynamicsCrmServerSyncProvider.IdAttributeName, TestDynamicsCrmServerSyncProvider.TestEntityName);
                     var rowCount = (int)sqlCeCommand.ExecuteScalar();
-                    Assert.That(rowCount, Is.EqualTo(1), string.Format("Only 1 record was synchronised however {0} records ended up in the client database!", rowCount));
+                    Assert.That(rowCount, Is.EqualTo(existingCount + 1), string.Format("Only 1 new record was created, however after a few synchronisations, {0} new records ended up in the client database!", rowCount - existingCount));
                 }
                 clientConn.Close();
             }
@@ -236,6 +253,16 @@ namespace CrmSync.Tests.SystemTests
                 // Check for test entity - if it doesn't exist then create it.
                 var request = new DeleteEntityRequest();
                 request.LogicalName = TestDynamicsCrmServerSyncProvider.TestEntityName;
+                try
+                {
+
+                }
+                catch (Exception)
+                {
+                   // var r = new RetrieveDependenciesForDeleteRequest();
+                  //  r.ComponentType = ComponentType.
+                    throw;
+                }
                 var response = (DeleteEntityResponse)orgService.Execute(request);
                 if (response == null)
                 {
