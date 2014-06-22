@@ -67,15 +67,32 @@ namespace CrmSync.Tests
             var nameColumn = new ColumnInfo(NameAttributeName, DbType.String);
             AllColumnInfo.Add(nameColumn);
 
-            AllColumnInfo.Add(new ColumnInfo("createdby", DbType.Guid));
-            AllColumnInfo.Add(new ColumnInfo("createdonbehalfby", DbType.Guid));
-            AllColumnInfo.Add(new ColumnInfo("modifiedby", DbType.Guid));
-            AllColumnInfo.Add(new ColumnInfo("modifiedonbehalfby", DbType.Guid));
-            AllColumnInfo.Add(new ColumnInfo("ownerid", DbType.Guid));
-            AllColumnInfo.Add(new ColumnInfo("owningbusinessunit", DbType.Guid));
-            AllColumnInfo.Add(new ColumnInfo("owningteam", DbType.Guid));
-            AllColumnInfo.Add(new ColumnInfo("owninguser", DbType.Guid));
-            AllColumnInfo.Add(new ColumnInfo("versionnumber", DbType.Int64));
+            var createdByColumn = new ColumnInfo("createdby", DbType.Guid);
+            AllColumnInfo.Add(createdByColumn);
+
+            var createdOnBehalfByColumn = new ColumnInfo("createdonbehalfby", DbType.Guid);
+            AllColumnInfo.Add(createdOnBehalfByColumn);
+            
+            var modifiedByColumn = new ColumnInfo("modifiedby", DbType.Guid);
+            AllColumnInfo.Add(modifiedByColumn);
+
+            var modifiedOnBehalfByColumn = new ColumnInfo("modifiedonbehalfby", DbType.Guid);
+            AllColumnInfo.Add(modifiedOnBehalfByColumn);
+
+            var ownerIdColumn = new ColumnInfo("ownerid", DbType.Guid);
+            AllColumnInfo.Add(ownerIdColumn);
+
+            var owningBusinessUnitColumn = new ColumnInfo("owningbusinessunit", DbType.Guid);
+            AllColumnInfo.Add(owningBusinessUnitColumn);
+
+            var owningTeamColumn = new ColumnInfo("owningteam", DbType.Guid);
+            AllColumnInfo.Add(owningTeamColumn);
+
+            var owningUserColumn = new ColumnInfo("owninguser", DbType.Guid);
+            AllColumnInfo.Add(owningUserColumn);
+
+            var versionNumberColumn = new ColumnInfo("versionnumber", DbType.Int64);
+            AllColumnInfo.Add(versionNumberColumn);
 
             // Sync provisioned fields.
             var createdBySyncClientIdColumn = new ColumnInfo(SyncColumnInfo.CreatedBySyncClientIdAttributeName, DbType.Guid, SyncSession.SyncClientId);
@@ -96,14 +113,32 @@ namespace CrmSync.Tests
             UpdateColumns.Add(nameColumn);
 
             // Fields to be selected from the server and replicated to the client.
-            foreach (var a in AllColumnInfo)
-            {
-                // dont include the client id in selection.
-                if (a.AttributeName != SyncColumnInfo.CreatedBySyncClientIdAttributeName)
-                {
-                    SelectColumns.Add(a);
-                }
-            }
+
+            SelectColumns.Add(idColumn);
+            SelectColumns.Add(nameColumn);
+            SelectColumns.Add(createdByColumn);
+            SelectColumns.Add(createdOnBehalfByColumn);
+            SelectColumns.Add(modifiedByColumn);
+            SelectColumns.Add(modifiedOnBehalfByColumn);
+            SelectColumns.Add(ownerIdColumn);
+            SelectColumns.Add(owningBusinessUnitColumn);
+            SelectColumns.Add(owningTeamColumn);
+            SelectColumns.Add(owningUserColumn);
+            SelectColumns.Add(versionNumberColumn);
+            SelectColumns.Add(createdBySyncClientIdColumn);
+          //  SelectColumns.Add(createdRowVersionColumn);
+
+            //var excluded = new List<string>();
+            //excluded.Add(SyncColumnInfo.CreatedBySyncClientIdAttributeName);
+            //excluded.Add(SyncColumnInfo.RowVersionAttributeName);
+            //foreach (var a in AllColumnInfo)
+            //{
+            //    // dont include the client id in selection.
+            //    if (!excluded.Contains(a.AttributeName))
+            //    {
+            //        SelectColumns.Add(a);
+            //    }
+            //}
 
         }
 

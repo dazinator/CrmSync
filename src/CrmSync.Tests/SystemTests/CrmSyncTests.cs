@@ -119,6 +119,10 @@ namespace CrmSync.Tests.SystemTests
 
             }
 
+            // Verfiy client record was updated?
+            Assert.That(syncStatistics.DownloadChangesFailed, Is.EqualTo(0), "There were failed downloads during the sync.");
+            Assert.That(syncStatistics.UploadChangesFailed, Is.EqualTo(0), "There were failed uploads during the sync.");
+
             syncStatistics = sampleSyncAgent.Synchronize();
             sampleStats.DisplayStats(syncStatistics, "third");
 
