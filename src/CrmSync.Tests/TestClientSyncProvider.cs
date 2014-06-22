@@ -35,9 +35,12 @@ namespace CrmSync.Tests
             //to specify literal defaults with .Columns[ColName].DefaultValue;
             //but we will specify defaults like NEWID() by calling
             //ALTER TABLE after the table is created.
-            Console.Write("Creating schema for " + e.Table.TableName + " | ");
-            var idColumn = e.Table.TableName + "id";
-            e.Schema.Tables[e.Table.TableName].Columns[idColumn].RowGuid = true;
+           Console.Write("Creating schema for " + e.Table.TableName + " | ");
+           PrintDataSet(e.Schema.SchemaDataSet);
+
+           var idColumn = e.Table.TableName + "id";
+           e.Schema.Tables[e.Table.TableName].Columns[idColumn].RowGuid = true;
+            
         }
 
         private void SampleClientSyncProvider_SchemaCreated(object sender, SchemaCreatedEventArgs e)
@@ -130,18 +133,17 @@ namespace CrmSync.Tests
 
             //Execute the command, then leave the transaction and 
             //connection open. The client provider will commit and close.
-            switch (tableName)
+            if (tableName == TestDynamicsCrmServerSyncProvider.TestEntityName)
             {
-                case TestDynamicsCrmServerSyncProvider.TestEntityName:
-                    var idColumnName = TestDynamicsCrmServerSyncProvider.IdAttributeName;
+                var idColumnName = TestDynamicsCrmServerSyncProvider.IdAttributeName;
 
-                    alterTable.CommandText =
-                        "ALTER TABLE " + TestDynamicsCrmServerSyncProvider.TestEntityName +
-                        " ADD CONSTRAINT DF_" + idColumnName +
-                        " DEFAULT NEWID() FOR " + idColumnName;
-                    alterTable.ExecuteNonQuery();
-                    break;
+                alterTable.CommandText =
+                    "ALTER TABLE " + TestDynamicsCrmServerSyncProvider.TestEntityName +
+                    " ADD CONSTRAINT DF_" + idColumnName +
+                    " DEFAULT NEWID() FOR " + idColumnName;
+                alterTable.ExecuteNonQuery();
             }
+
         }
 
 

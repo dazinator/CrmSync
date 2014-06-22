@@ -60,15 +60,15 @@ namespace CrmSync.Tests.SystemTests
                 Console.WriteLine("Record created: " + newRecordId);
 
                 // pull back the record and verify the plugin captured the creation version of the record.
-                var ent = orgService.Retrieve(TestEntityName, newRecordId, new ColumnSet(CrmSyncChangeTrackerPlugin.RowVersionAttributeName, CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName));
+                var ent = orgService.Retrieve(TestEntityName, newRecordId, new ColumnSet(SyncColumnInfo.RowVersionAttributeName, SyncColumnInfo.CreatedRowVersionAttributeName));
 
-                Assert.That(ent.Attributes.ContainsKey(CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName));
-                Assert.That(ent.Attributes.ContainsKey(CrmSyncChangeTrackerPlugin.RowVersionAttributeName));
+                Assert.That(ent.Attributes.ContainsKey(SyncColumnInfo.CreatedRowVersionAttributeName));
+                Assert.That(ent.Attributes.ContainsKey(SyncColumnInfo.RowVersionAttributeName));
 
-                var rowVersion = (long)ent.Attributes[CrmSyncChangeTrackerPlugin.RowVersionAttributeName];
+                var rowVersion = (long)ent.Attributes[SyncColumnInfo.RowVersionAttributeName];
                 Assert.That(rowVersion, Is.GreaterThan(0));
 
-                var capturedCreationVersion = System.Convert.ToInt64((decimal)ent.Attributes[CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName]);
+                var capturedCreationVersion = System.Convert.ToInt64((decimal)ent.Attributes[SyncColumnInfo.CreatedRowVersionAttributeName]);
 
                 Assert.That(capturedCreationVersion, Is.GreaterThan(0));
                 // the row version is incremented on every modification of the record - as the plugin modified it when saving the creation version this causes the
@@ -165,7 +165,7 @@ namespace CrmSync.Tests.SystemTests
                              .DisplayName("Sync Plugin Test")
                              .WithAttributes()
                              .StringAttribute(NameAttributeName, "name", "name attribute", AttributeRequiredLevel.Recommended, 255, StringFormat.Text)
-                             .DecimalAttribute(CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName,
+                             .DecimalAttribute(SyncColumnInfo.CreatedRowVersionAttributeName,
                                               "CrmSync Creation Version",
                                               "The RowVersion of the record when it was created.",
                                               AttributeRequiredLevel.None, 0, null, 0)

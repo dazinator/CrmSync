@@ -173,12 +173,12 @@ namespace CrmSync.Tests.SystemTests
             _OrganizationService.Update(entity);
             var newAnchor = _OrganizationService.Retrieve(EntityName, entity.Id,
                                                           new ColumnSet(
-                                                              CrmSyncChangeTrackerPlugin.RowVersionAttributeName));
+                                                              SyncColumnInfo.RowVersionAttributeName));
             if (newAnchor == null)
             {
                 throw new InvalidOperationException(string.Format("CrmSync client record with id {0} not found.", entity.Id.ToString()));
             }
-            var rowVersion = (long)newAnchor[CrmSyncChangeTrackerPlugin.RowVersionAttributeName];
+            var rowVersion = (long)newAnchor[SyncColumnInfo.RowVersionAttributeName];
             return rowVersion;
         }
 

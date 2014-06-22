@@ -218,7 +218,6 @@
     <Compile Include="UpdateEntityDbCommandAdapter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Utitlity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

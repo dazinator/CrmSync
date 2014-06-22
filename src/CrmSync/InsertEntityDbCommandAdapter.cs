@@ -25,7 +25,7 @@ namespace CrmSync
 
         public override int ExecuteNonQuery()
         {
-          //  Debug.WriteLine("Execute non query " + DateTime.Now + " for command text: " + this.CommandText);
+            Debug.WriteLine("Executing Server Insert: " + DateTime.Now + " Command Text: " + this.CommandText);
 
 #if DEBUG
             Console.Write("Inserting entity into CRM. ");

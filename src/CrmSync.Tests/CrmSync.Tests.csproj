@@ -173,6 +173,7 @@
     <Compile Include="TestDynamicsCrmServerSyncProvider.cs" />
     <Compile Include="TestDynamicsCrmSyncAgent.cs" />
     <Compile Include="TestClientSyncProvider.cs" />
+    <Compile Include="Utitlity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

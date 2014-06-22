@@ -12,9 +12,7 @@ namespace CrmSync.Plugin
         }
         // public const string PluginName = "CrmSyncChangeTrackerPlugin";
 
-        public const string RowVersionAttributeName = "versionnumber";
-        public const string CreatedRowVersionAttributeName = "crmsync_createdversionnumber";
-        public static Type CreationVersionColumnType = typeof(decimal);
+     
 
         protected override void Execute()
         {
@@ -23,14 +21,14 @@ namespace CrmSync.Plugin
             var targetEntity = EnsureTargetEntity();
             IOrganizationService orgService = null;
 
-            if (!targetEntity.Contains(RowVersionAttributeName))
+            if (!targetEntity.Contains(SyncColumnInfo.RowVersionAttributeName))
             {
                 // retrieve from db again?
                 orgService = GetOrganisationService();
                 //Entity currentEntity;
                 try
                 {
-                    targetEntity = orgService.Retrieve(targetEntity.LogicalName, targetEntity.Id, new ColumnSet(RowVersionAttributeName));
+                    targetEntity = orgService.Retrieve(targetEntity.LogicalName, targetEntity.Id, new ColumnSet(SyncColumnInfo.RowVersionAttributeName));
                 }
                 catch (Exception e)
                 {
@@ -38,17 +36,17 @@ namespace CrmSync.Plugin
                     return;
                 }
 
-                if (!targetEntity.Contains(RowVersionAttributeName))
+                if (!targetEntity.Contains(SyncColumnInfo.RowVersionAttributeName))
                 {
                     Fail("Could not get the RowVersion of the current Entity");
                     return;
                 }
             }
 
-            var rowVersion = targetEntity[RowVersionAttributeName];
+            var rowVersion = targetEntity[SyncColumnInfo.RowVersionAttributeName];
             var capturedRowVersion = Convert.ToDecimal(rowVersion);
 
-            targetEntity[CreatedRowVersionAttributeName] = capturedRowVersion;
+            targetEntity[SyncColumnInfo.CreatedRowVersionAttributeName] = capturedRowVersion;
             if (orgService == null)
             {
                 orgService = GetOrganisationService();

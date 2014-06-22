@@ -14,10 +14,12 @@ namespace CrmSync
     public class SelectIncrementalCreatesCommand : CrmDbCommand
     {
 
+        public static string SyncClientId;
+
         private CrmDbCommand _WrappedCommand;
 
         private static object DefaultAnchorValue = System.Convert.ChangeType(0,
-                                                                      Plugin.CrmSyncChangeTrackerPlugin
+                                                                      Plugin.SyncColumnInfo
                                                                             .CreationVersionColumnType);
 
 
@@ -28,7 +30,7 @@ namespace CrmSync
 
         public override int ExecuteNonQuery()
         {
-            //Debug.WriteLine("Execute non query " + DateTime.Now + " for command text: " + this.CommandText);
+            Debug.WriteLine("Selecting incremental creates @ " + DateTime.Now + " Command text: " + this.CommandText);
             PreExecuteCheck();
 #if DEBUG
             Console.WriteLine("Selecting incremental creates between " + this.Parameters[0].Value + " and " + this.Parameters[1].Value);
@@ -77,8 +79,21 @@ namespace CrmSync
             // because our anchor values are long's but we aren't allowed to create "long" fields in dynamics, we have to
             // convert between the long value and a decimal as our custom field for creation version is a decimal.
 
+
+            var clientParam = this.Parameters["@" + SyncSession.SyncClientId];
+            if (clientParam != null)
+            {
+                if (clientParam.Value != null && clientParam.Value != DBNull.Value)
+                {
+
+                    ChangeSyncClientParameterType(clientParam);
+                    SyncClientId = (String)clientParam.Value;
+                }
+            }
+
+
             var lastAnchorParam = this.Parameters["@" + SyncSession.SyncLastReceivedAnchor];
-            ChangeParameterType(lastAnchorParam);
+            ChangeAnchorParameterType(lastAnchorParam);
 
             // if the last anchor is zero this indicates that this is the first time we are synchronising.
             if (lastAnchorParam == null || lastAnchorParam.Value == DefaultAnchorValue)
@@ -88,7 +103,7 @@ namespace CrmSync
 
 
             var newAnchorParam = this.Parameters["@" + SyncSession.SyncNewReceivedAnchor];
-            ChangeParameterType(newAnchorParam);
+            ChangeAnchorParameterType(newAnchorParam);
 
         }
 
@@ -98,10 +113,10 @@ namespace CrmSync
             // could register client with server?
             // could get anchor differently.
 
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
-        private void ChangeParameterType(DbParameter param)
+        private void ChangeAnchorParameterType(DbParameter param)
         {
             if (param != null)
             {
@@ -111,9 +126,32 @@ namespace CrmSync
                 }
                 else
                 {
-                    if (param.Value.GetType() != Plugin.CrmSyncChangeTrackerPlugin.CreationVersionColumnType)
+                    if (param.Value.GetType() != Plugin.SyncColumnInfo.CreationVersionColumnType)
                     {
-                        param.Value = System.Convert.ChangeType(param.Value, Plugin.CrmSyncChangeTrackerPlugin.CreationVersionColumnType);
+                        param.Value = System.Convert.ChangeType(param.Value, Plugin.SyncColumnInfo.CreationVersionColumnType);
+                    }
+                }
+
+            }
+        }
+
+        private void ChangeSyncClientParameterType(DbParameter param)
+        {
+            if (param != null)
+            {
+                if (param.Value == DBNull.Value)
+                {
+                    //  param.Value = DefaultAnchorValue;
+                }
+                else
+                {
+                    if (param.Value.GetType() != Plugin.SyncColumnInfo.CreatedBySyncClientIdColumnType)
+                    {
+                        param.Value = param.Value.ToString();
+                        if (param.DbType != DbType.String)
+                        {
+                            param.DbType = DbType.String;
+                        }
                     }
                 }
 

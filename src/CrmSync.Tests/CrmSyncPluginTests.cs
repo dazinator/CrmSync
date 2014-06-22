@@ -25,14 +25,14 @@ namespace CrmSync.Tests
 
             Assert.That(updatedEntity, Is.Not.Null);
             Assert.That(updatedEntity.Attributes, Is.Not.Null);
-            Assert.That(updatedEntity.Attributes.ContainsKey(CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName));
-            Assert.That(updatedEntity.Attributes.ContainsKey(CrmSyncChangeTrackerPlugin.RowVersionAttributeName));
+            Assert.That(updatedEntity.Attributes.ContainsKey(SyncColumnInfo.CreatedRowVersionAttributeName));
+            Assert.That(updatedEntity.Attributes.ContainsKey(SyncColumnInfo.RowVersionAttributeName));
 
 
-            var rowVersion = (long)updatedEntity.Attributes[CrmSyncChangeTrackerPlugin.RowVersionAttributeName];
+            var rowVersion = (long)updatedEntity.Attributes[SyncColumnInfo.RowVersionAttributeName];
             Assert.That(rowVersion, Is.GreaterThan(0));
 
-            var capturedCreationVersion = (decimal)updatedEntity.Attributes[CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName];
+            var capturedCreationVersion = (decimal)updatedEntity.Attributes[SyncColumnInfo.CreatedRowVersionAttributeName];
 
             Assert.That(rowVersion, Is.EqualTo(capturedCreationVersion));
 
@@ -61,7 +61,7 @@ namespace CrmSync.Tests
         {
             var testEntity = new Entity("unittestentity");
             testEntity.Id = Guid.NewGuid();
-            testEntity[CrmSyncChangeTrackerPlugin.RowVersionAttributeName] = 102525478L;
+            testEntity[SyncColumnInfo.RowVersionAttributeName] = 102525478L;
             return testEntity;
         }
 

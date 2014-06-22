@@ -10,53 +10,99 @@ using Microsoft.Synchronization.Data.Server;
 
 namespace CrmSync.Tests
 {
+
+    public class ColumnInfo
+    {
+        public ColumnInfo(string attributeName, DbType type)
+        {
+            AttributeName = attributeName;
+            Type = type;
+            BoundParameterName = string.Format("@{0}", attributeName);
+        }
+
+        public ColumnInfo(string attributeName, DbType type, string boundParameterName)
+        {
+            AttributeName = attributeName;
+            Type = type;
+
+            if (!boundParameterName.StartsWith("@"))
+            {
+                BoundParameterName = string.Format("@{0}", boundParameterName);
+            }
+            else
+            {
+                BoundParameterName = boundParameterName;
+            }
+
+        }
+
+
+        public string AttributeName { get; set; }
+        public string BoundParameterName { get; set; }
+        public DbType Type { get; set; }
+    }
+
+
     public class TestDynamicsCrmServerSyncProvider : DbServerSyncProvider
     {
 
-        public const string TestEntityName = "crmsync_atestpluginentity";
-        public const string NameAttributeName = "crmsync_atestpluginentityname";
-        public const string IdAttributeName = "crmsync_atestpluginentityid";
+        public static string TestEntityName = ("crmsync_" + (char)new Random().Next(128)).ToLower();
+        public static string NameAttributeName = TestEntityName + "name";
+        public static string IdAttributeName = TestEntityName + "id";
 
-        public static Dictionary<string, DbType> AllColumnInfo = new Dictionary<string, DbType>();
-        public static Dictionary<string, DbType> SelectColumns = new Dictionary<string, DbType>();
+        public static List<ColumnInfo> AllColumnInfo = new List<ColumnInfo>();
+        public static List<ColumnInfo> SelectColumns = new List<ColumnInfo>();
 
-        public static Dictionary<string, DbType> InsertColumns = new Dictionary<string, DbType>();
-        public static Dictionary<string, DbType> UpdateColumns = new Dictionary<string, DbType>();
+        public static List<ColumnInfo> InsertColumns = new List<ColumnInfo>();
+        public static List<ColumnInfo> UpdateColumns = new List<ColumnInfo>();
 
-
-        public static Dictionary<string, DbType> ColumnInfo = new Dictionary<string, DbType>();
+        public static List<ColumnInfo> ClientInsertColumns = new List<ColumnInfo>();
 
         private void LoadColumnInfo()
         {
-            // System Fields.
-            AllColumnInfo[IdAttributeName] = DbType.Guid;
-            AllColumnInfo[NameAttributeName] = DbType.String;
+            // Crm System Fields.
+            var idColumn = new ColumnInfo(IdAttributeName, DbType.Guid);
+            AllColumnInfo.Add(idColumn);
 
-            AllColumnInfo["createdby"] = DbType.Guid;
-            AllColumnInfo["createdonbehalfby"] = DbType.Guid;
-            AllColumnInfo["modifiedby"] = DbType.Guid;
-            AllColumnInfo["modifiedonbehalfby"] = DbType.Guid;
-            AllColumnInfo["ownerid"] = DbType.Guid;
-            AllColumnInfo["owningbusinessunit"] = DbType.Guid;
-            AllColumnInfo["owningteam"] = DbType.Guid;
-            AllColumnInfo["owninguser"] = DbType.Guid;
-            AllColumnInfo["versionnumber"] = DbType.Int64;
+            var nameColumn = new ColumnInfo(NameAttributeName, DbType.String);
+            AllColumnInfo.Add(nameColumn);
 
-            // Sync System Fields.
-            AllColumnInfo[CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName] = DbType.Decimal;
+            AllColumnInfo.Add(new ColumnInfo("createdby", DbType.Guid));
+            AllColumnInfo.Add(new ColumnInfo("createdonbehalfby", DbType.Guid));
+            AllColumnInfo.Add(new ColumnInfo("modifiedby", DbType.Guid));
+            AllColumnInfo.Add(new ColumnInfo("modifiedonbehalfby", DbType.Guid));
+            AllColumnInfo.Add(new ColumnInfo("ownerid", DbType.Guid));
+            AllColumnInfo.Add(new ColumnInfo("owningbusinessunit", DbType.Guid));
+            AllColumnInfo.Add(new ColumnInfo("owningteam", DbType.Guid));
+            AllColumnInfo.Add(new ColumnInfo("owninguser", DbType.Guid));
+            AllColumnInfo.Add(new ColumnInfo("versionnumber", DbType.Int64));
 
-            // Custom Fields.
+            // Sync provisioned fields.
+            var createdBySyncClientIdColumn = new ColumnInfo(SyncColumnInfo.CreatedBySyncClientIdAttributeName, DbType.Guid, SyncSession.SyncClientId);
+            AllColumnInfo.Add(createdBySyncClientIdColumn);
 
-            // Fields for Generated Insert Statement
-            InsertColumns[NameAttributeName] = AllColumnInfo[NameAttributeName];
+            var createdRowVersionColumn = new ColumnInfo(SyncColumnInfo.CreatedRowVersionAttributeName, DbType.Decimal);
+            AllColumnInfo.Add(createdRowVersionColumn);
 
-            // Fields for Generated Update Statement
-            UpdateColumns[NameAttributeName] = AllColumnInfo[NameAttributeName];
+            // Fields to be included in server insert statement.
+            InsertColumns.Add(idColumn);
+            InsertColumns.Add(nameColumn);
+            InsertColumns.Add(createdBySyncClientIdColumn);
 
-            // Fields for Generated Select Statement.
+            // Fields to be included in client insert statement.
+            ClientInsertColumns.Add(nameColumn);
+
+            // Fields to be included in server update statement.
+            UpdateColumns.Add(nameColumn);
+
+            // Fields to be selected from the server and replicated to the client.
             foreach (var a in AllColumnInfo)
             {
-                SelectColumns[a.Key] = a.Value;
+                // dont include the client id in selection.
+                if (a.AttributeName != SyncColumnInfo.CreatedBySyncClientIdAttributeName)
+                {
+                    SelectColumns.Add(a);
+                }
             }
 
         }
@@ -72,12 +118,23 @@ namespace CrmSync.Tests
             var entityName = TestEntityName;
             var idColumn = IdAttributeName;
 
-            var sqlStringGetAnchor = string.Format("select top 1 versionnumber from {0} order by {1} desc", entityName, CrmSyncChangeTrackerPlugin.RowVersionAttributeName);
+            var sqlStringGetAnchor = string.Format("select top 1 {0} from {1} order by {0} desc", SyncColumnInfo.RowVersionAttributeName, entityName);
             // just get records with a creation version greater than last anchor and less than or equal to current anchor.
-            var sqlStringGetInserts = string.Format("SELECT {0} FROM {1} WHERE ({2} > @sync_last_received_anchor AND {2} <= @sync_new_received_anchor)", string.Join(",", SelectColumns.Keys), entityName, CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName);
-            var sqlStringGetUpdates = string.Format("SELECT {0} FROM {1} WHERE (versionnumber > @sync_last_received_anchor AND versionnumber <= @sync_new_received_anchor)", string.Join(",", SelectColumns.Keys), entityName);
-            var sqlStringApplyInsert = string.Format("INSERT INTO {0} ({1}) VALUES ({2})", entityName, string.Join(",", InsertColumns.Keys), string.Join(",", InsertColumns.Select(a => "@" + a.Key)));
-            var sqlStringApplyUpdate = string.Format("UPDATE {0} SET {1} WHERE ({2} = @{2})", entityName, string.Join(",", UpdateColumns.Select(a => "@" + a.Key)), idColumn);
+            var selectInsertsColumns = string.Join(",", SelectColumns.Select(s => s.AttributeName));
+
+
+            var sqlStringGetInserts = string.Format("SELECT {0} FROM {1} WHERE ({2} > @{3} AND {2} <= @{4}) AND ({5} <> @{6})", selectInsertsColumns, entityName, SyncColumnInfo.CreatedRowVersionAttributeName, SyncSession.SyncLastReceivedAnchor, SyncSession.SyncNewReceivedAnchor, SyncColumnInfo.CreatedBySyncClientIdAttributeName, SyncSession.SyncClientId);
+
+            var sqlSelectUpdateColumns = string.Join(",", SelectColumns.Select(s => s.AttributeName));
+            var sqlStringGetUpdates = string.Format("SELECT {0} FROM {1} WHERE ({2} > @{3} AND {2} <= @{4})", sqlSelectUpdateColumns, entityName, SyncColumnInfo.RowVersionAttributeName, SyncSession.SyncLastReceivedAnchor, SyncSession.SyncNewReceivedAnchor);
+
+
+            var sqlInsertColumns = string.Join(",", InsertColumns.Select(s => s.AttributeName));
+            var sqlInsertParameters = string.Join(",", InsertColumns.Select(a => a.BoundParameterName));
+            var sqlStringApplyInsert = string.Format("INSERT INTO {0} ({1}) VALUES ({2})", entityName, sqlInsertColumns, sqlInsertParameters);
+
+            var sqlUpdateColumns = string.Join(",", UpdateColumns.Select(a => a.AttributeName));
+            var sqlStringApplyUpdate = string.Format("UPDATE {0} SET {1} WHERE ({2} = @{2})", entityName, sqlUpdateColumns, idColumn);
 
             DbCommand selectNewAnchorCommand = new AnchorDbCommandAdapter(serverConn.CreateCommand() as CrmDbCommand);
             var anchorParam = selectNewAnchorCommand.CreateParameter();
@@ -123,10 +180,10 @@ namespace CrmSync.Tests
             contactInserts.CommandText = sqlStringApplyInsert;
             foreach (var insertColumn in InsertColumns)
             {
-                AddParameter(contactInserts, insertColumn.Key, insertColumn.Value);
+                AddParameter(contactInserts, insertColumn.BoundParameterName, insertColumn.Type);
             }
 
-            AddParameter(contactInserts, SyncSession.SyncClientId, DbType.Guid);
+            // AddParameter(contactInserts, SyncSession.SyncClientId, DbType.Guid);
             var param = AddParameter(contactInserts, SyncSession.SyncRowCount, DbType.Int32);
             param.Direction = ParameterDirection.Output;
 
@@ -149,7 +206,7 @@ namespace CrmSync.Tests
             customerUpdates.CommandText = sqlStringApplyUpdate;
             foreach (var col in UpdateColumns)
             {
-                AddParameter(contactInserts, col.Key, col.Value);
+                AddParameter(contactInserts, col.BoundParameterName, col.Type);
             }
 
             AddParameter(customerUpdates, SyncSession.SyncClientId, DbType.Guid);
@@ -168,7 +225,14 @@ namespace CrmSync.Tests
         private static DbParameter AddParameter(DbCommand command, string parameterName, DbType dbType)
         {
             var par = command.CreateParameter();
-            par.ParameterName = "@" + parameterName;
+            if (!parameterName.StartsWith("@"))
+            {
+                par.ParameterName = "@" + parameterName;
+            }
+            else
+            {
+                par.ParameterName = parameterName;
+            }
             par.DbType = dbType;
             command.Parameters.Add(par);
             return par;
@@ -178,11 +242,12 @@ namespace CrmSync.Tests
         {
 
             var valuesForInsert = new Dictionary<string, string>();
+
             var valuesClause = Utility.BuildSqlValuesClause(InsertColumns, valuesForInsert);
+            var insertColumnNames = string.Join(",", InsertColumns.Select(s => s.AttributeName));
+
             var commandText = string.Format("INSERT INTO {0} ({1}) VALUES ({2})",
-                                            TestEntityName,
-                                            string.Join(",", InsertColumns.Keys),
-                                            valuesClause);
+                                            TestEntityName, insertColumnNames, valuesClause);
 
             int rowCount = 0;
             using (var serverConn = this.Connection)

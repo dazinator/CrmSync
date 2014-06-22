@@ -13,6 +13,7 @@ using CrmSync.Dynamics;
 using CrmSync.Dynamics.Metadata;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Synchronization.Data;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -53,10 +54,12 @@ namespace CrmSync.Tests.SystemTests
             }
 
             DeleteSqlCompactDatabase();
+
             // LoadColumnInfo();
 
             // Ensure custom test entity present in crm.
             var service = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
+            DeleteTestEntity(service);
             CrmConnectionString = service.ConnectionProvider.OrganisationServiceConnectionString;
             CreateTestEntity(service);
 
@@ -91,7 +94,7 @@ namespace CrmSync.Tests.SystemTests
                 {
                     sqlCeCommand.CommandText = string.Format("SELECT COUNT({0}) FROM {1}", TestDynamicsCrmServerSyncProvider.IdAttributeName, TestDynamicsCrmServerSyncProvider.TestEntityName);
                     existingCount = (int)sqlCeCommand.ExecuteScalar();
-                   // Assert.That(rowCount, Is.EqualTo(1), string.Format("Only 1 record was synchronised however {0} records ended up in the client database!", rowCount));
+                    // Assert.That(rowCount, Is.EqualTo(1), string.Format("Only 1 record was synchronised however {0} records ended up in the client database!", rowCount));
                 }
                 clientConn.Close();
             }
@@ -104,6 +107,17 @@ namespace CrmSync.Tests.SystemTests
             //Subsequent synchronization.
             syncStatistics = sampleSyncAgent.Synchronize();
             sampleStats.DisplayStats(syncStatistics, "second");
+
+            // Verfiy new record added on server.
+            var service = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
+            using (var orgService = service.GetOrganisationService() as OrganizationServiceContext)
+            {
+                var entity = (from a in orgService.CreateQuery(TestDynamicsCrmServerSyncProvider.TestEntityName) orderby a["createdon"] descending select a).FirstOrDefault();
+                Assert.That(entity, Is.Not.Null);
+                var clientId = entity.Attributes[SyncColumnInfo.CreatedBySyncClientIdAttributeName];
+                Assert.That(clientId, Is.EqualTo(SelectIncrementalCreatesCommand.SyncClientId), "A record was inserted during synchronisation, however it did not have a client id set.");
+
+            }
 
             syncStatistics = sampleSyncAgent.Synchronize();
             sampleStats.DisplayStats(syncStatistics, "third");
@@ -129,9 +143,25 @@ namespace CrmSync.Tests.SystemTests
         {
             // Ensure custom test entity removed.
             var service = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
+            Exception ex = null;
+            try
+            {
+                UnregisterPlugin(service);
+            }
+            catch (Exception e)
+            {
+                ex = e;
+            }
 
-            UnregisterPlugin(service);
-            DeleteTestEntity(service);
+            try
+            {
+                DeleteTestEntity(service);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message, ex);
+            }
+
 
         }
 
@@ -206,7 +236,9 @@ namespace CrmSync.Tests.SystemTests
                              .DisplayName("Sync Plugin Test")
                              .WithAttributes()
                              .StringAttribute(TestDynamicsCrmServerSyncProvider.NameAttributeName, "name", "name attribute", AttributeRequiredLevel.Recommended, 255, StringFormat.Text)
-                             .DecimalAttribute(CrmSyncChangeTrackerPlugin.CreatedRowVersionAttributeName,
+                             .StringAttribute(SyncColumnInfo.CreatedBySyncClientIdAttributeName, "created by sync client", "The sync client that created this record", AttributeRequiredLevel.Recommended, 255, StringFormat.Text)
+
+                             .DecimalAttribute(SyncColumnInfo.CreatedRowVersionAttributeName,
                                               "CrmSync Creation Version",
                                               "The RowVersion of the record when it was created.",
                                               AttributeRequiredLevel.None, 0, null, 0)
@@ -251,23 +283,47 @@ namespace CrmSync.Tests.SystemTests
             using (var orgService = (OrganizationServiceContext)serviceProvider.GetOrganisationService())
             {
                 // Check for test entity - if it doesn't exist then create it.
+
+                var retrieveEntity = new RetrieveEntityRequest();
+                retrieveEntity.RetrieveAsIfPublished = true;
+                retrieveEntity.LogicalName = TestDynamicsCrmServerSyncProvider.TestEntityName;
+                RetrieveEntityResponse retrieveEntityResponse = null;
+                try
+                {
+                    retrieveEntityResponse = (RetrieveEntityResponse)orgService.Execute(retrieveEntity);
+                }
+                catch (Exception e)
+                {
+                    return;
+                }
+
                 var request = new DeleteEntityRequest();
                 request.LogicalName = TestDynamicsCrmServerSyncProvider.TestEntityName;
                 try
                 {
+                    var response = (DeleteEntityResponse)orgService.Execute(request);
+                    if (response == null)
+                    {
+                        throw new Exception("Expected response.");
+                    }
+                }
+                catch (Exception e)
+                {
+
+
+                    RetrieveDependenciesForDeleteRequest req = new RetrieveDependenciesForDeleteRequest();
+                    req.ComponentType = (int)SolutionComponentType.Entity;
+                    //use the metadata browser or a retrieveentity request to get the MetadataId for the entity
+                    req.ObjectId = retrieveEntityResponse.EntityMetadata.MetadataId.Value;
+                    var dependenciesResponse = (RetrieveDependenciesForDeleteResponse)orgService.Execute(req);
+
+                    foreach (Entity item in dependenciesResponse.EntityCollection.Entities)
+                    {
+                        Console.WriteLine("Could not delte entity because dependency: " + item.LogicalName + " id: " + item.Id);
+                    }
 
                 }
-                catch (Exception)
-                {
-                   // var r = new RetrieveDependenciesForDeleteRequest();
-                  //  r.ComponentType = ComponentType.
-                    throw;
-                }
-                var response = (DeleteEntityResponse)orgService.Execute(request);
-                if (response == null)
-                {
-                    throw new Exception("Expected response.");
-                }
+
 
             }
         }
@@ -290,11 +346,12 @@ namespace CrmSync.Tests.SystemTests
         private void InsertNewRecordOnClient()
         {
             var valuesForInsert = new Dictionary<string, string>();
-            var valuesClause = Utility.BuildSqlValuesClause(TestDynamicsCrmServerSyncProvider.InsertColumns, valuesForInsert);
+            var valuesClause = Utility.BuildSqlValuesClause(TestDynamicsCrmServerSyncProvider.ClientInsertColumns, valuesForInsert);
+            var sqlColumns = string.Join(",",
+                                         TestDynamicsCrmServerSyncProvider.ClientInsertColumns.Select(
+                                             s => s.AttributeName));
             var commandText = string.Format("INSERT INTO {0} ({1}) VALUES ({2})",
-                                                  TestDynamicsCrmServerSyncProvider.TestEntityName,
-                                                  string.Join(",", TestDynamicsCrmServerSyncProvider.InsertColumns.Keys),
-                                                  valuesClause);
+                                                  TestDynamicsCrmServerSyncProvider.TestEntityName, sqlColumns, valuesClause);
 
             int rowCount = 0;
             using (var clientConn = new SqlCeConnection(SqlCompactDatabaseConnectionString))
@@ -312,5 +369,62 @@ namespace CrmSync.Tests.SystemTests
 
         #endregion
 
+    }
+
+
+    public enum SolutionComponentType
+    {
+        Entity = 1,
+        Attribute = 2,
+        Relationship = 3,
+        AttributePicklistValue = 4,
+        AttributeLookupValue = 5,
+        ViewAttribute = 6,
+        LocalizedLabel = 7,
+        RelationshipExtraCondition = 8,
+        OptionSet = 9,
+        EntityRelationship = 10,
+        EntityRelationshipRole = 11,
+        EntityRelationshipRelationships = 12,
+        ManagedProperty = 13,
+        Role = 20,
+        RolePrivilege = 21,
+        DisplayString = 22,
+        DisplayStringMap = 23,
+        Form = 24,
+        Organization = 25,
+        SavedQuery = 26,
+        Workflow = 29,
+        Report = 31,
+        ReportEntity = 32,
+        ReportCategory = 33,
+        ReportVisibility = 34,
+        Attachment = 35,
+        EmailTemplate = 36,
+        ContractTemplate = 37,
+        KBArticleTemplate = 38,
+        MailMergeTemplate = 39,
+        DuplicateRule = 44,
+        DuplicateRuleCondition = 45,
+        EntityMap = 46,
+        AttributeMap = 47,
+        RibbonCommand = 48,
+        RibbonContextGroup = 49,
+        RibbonCustomization = 50,
+        RibbonRule = 52,
+        RibbonTabToCommandMap = 53,
+        RibbonDiff = 55,
+        SavedQueryVisualization = 59,
+        SystemForm = 60,
+        WebResource = 61,
+        SiteMap = 62,
+        ConnectionRole = 63,
+        FieldSecurityProfile = 70,
+        FieldPermission = 71,
+        PluginType = 90,
+        PluginAssembly = 91,
+        SDKMessageProcessingStep = 92,
+        SDKMessageProcessingStepImage = 93,
+        ServiceEndpoint = 95
     }
 }

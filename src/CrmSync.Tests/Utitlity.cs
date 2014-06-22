@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CrmAdo;
+using CrmSync.Tests;
 
 namespace CrmSync
 {
@@ -57,7 +58,7 @@ namespace CrmSync
         /* ----------  BEGIN CODE FOR DBSERVERSYNCPROVIDER AND --------- //
            ----------      SQLCECLIENTSYNCPROVIDER SAMPLES     --------- */
 
-        public static string BuildSqlValuesClause(Dictionary<string, DbType> columns, Dictionary<string, string> specificValues)
+        public static string BuildSqlValuesClause(List<ColumnInfo> columns, Dictionary<string, string> specificValues)
         {
             var builder = new StringBuilder(String.Empty);
             var rand = new Random();
@@ -65,13 +66,13 @@ namespace CrmSync
             foreach (var column in columns)
             {
 
-                if (specificValues.ContainsKey(column.Key))
+                if (specificValues.ContainsKey(column.AttributeName))
                 {
-                    builder.Append(specificValues[column.Key]);
+                    builder.Append(specificValues[column.AttributeName]);
                 }
                 else
                 {
-                    switch (column.Value)
+                    switch (column.Type)
                     {
                         case DbType.AnsiString:
                         case DbType.AnsiStringFixedLength:
@@ -131,9 +132,9 @@ namespace CrmSync
                         case DbType.DateTime2:
                         case DbType.Byte:
                         case DbType.Binary:
-                            throw new NotSupportedException("column type of : " + column.Value.ToString() + "is not supported.");
+                            throw new NotSupportedException("column type of : " + column.Type.ToString() + "is not supported.");
                         default:
-                            throw new NotSupportedException("column type of : " + column.Value.ToString() + "is not supported.");
+                            throw new NotSupportedException("column type of : " + column.Type.ToString() + "is not supported.");
 
                     }
                 }
