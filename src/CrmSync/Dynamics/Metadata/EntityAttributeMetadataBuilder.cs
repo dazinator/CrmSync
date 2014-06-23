@@ -20,7 +20,7 @@ namespace CrmSync.Dynamics.Metadata
         }
 
 
-        public EntityAttributeMetadataBuilder StringAttribute(string schemaName,  string displayName, string description,
+        public EntityAttributeMetadataBuilder StringAttribute(string schemaName, string displayName, string description,
                                                                AttributeRequiredLevel requiredLevel,
                                                                int maxLength, StringFormat format)
         {
@@ -79,7 +79,7 @@ namespace CrmSync.Dynamics.Metadata
             this.Attributes.Add(dtAttribute);
             return this;
         }
-        
+
         public EntityAttributeMetadataBuilder IntAttribute(string schemaName, string displayName, string description, AttributeRequiredLevel requiredLevel, IntegerFormat format, int min, int max)
         {
             // Define the primary attribute for the entity
@@ -101,12 +101,12 @@ namespace CrmSync.Dynamics.Metadata
             this.Attributes.Add(integerAttribute);
             return this;
         }
-        
+
         public EntityAttributeMetadataBuilder BigIntAttribute(string schemaName, string displayName, string description, AttributeRequiredLevel requiredLevel)
         {
             // Define the primary attribute for the entity
             var newAtt = new BigIntAttributeMetadata()
-            { 
+            {
                 SchemaName = schemaName,
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(requiredLevel),
                 DisplayName = new Label(displayName, 1033),
@@ -137,5 +137,78 @@ namespace CrmSync.Dynamics.Metadata
             this.Attributes.Add(att);
             return this;
         }
+        
+        public EntityAttributeMetadataBuilder MemoAttribute(string schemaName, string displayName, string description, AttributeRequiredLevel requiredLevel, int maxLength, StringFormat format, ImeMode imeMode = ImeMode.Disabled)
+        {
+            // Define the primary attribute for the entity
+            var newAtt = new MemoAttributeMetadata
+            {
+                SchemaName = schemaName,
+                DisplayName = new Label(displayName, 1033),
+                RequiredLevel = new AttributeRequiredLevelManagedProperty(requiredLevel),
+                Description = new Label(description, 1033),
+                MaxLength = maxLength,
+                Format = format,
+                ImeMode = imeMode
+
+            };
+            this.Attributes.Add(newAtt);
+            return this;
+        }
+
+        public EntityAttributeMetadataBuilder MoneyAttribute(string schemaName, string displayName, string description, AttributeRequiredLevel requiredLevel, double? min, double? max, int? precision, int? precisionSource, ImeMode imeMode = ImeMode.Disabled)
+        {
+            // Define the primary attribute for the entity
+            // Create a integer attribute	
+            int languageCode = 1033;
+            var att = new MoneyAttributeMetadata()
+            {
+                // Set base properties
+                SchemaName = schemaName,
+                DisplayName = new Label(schemaName, languageCode),
+                RequiredLevel = new AttributeRequiredLevelManagedProperty(requiredLevel),
+                Description = new Label(description, languageCode),
+                // Set extended properties
+                Precision = precision,
+                PrecisionSource = precisionSource,
+                MaxValue = max,
+                MinValue = min,
+                ImeMode = imeMode
+            };
+
+            this.Attributes.Add(att);
+            return this;
+        }
+
+        public EntityAttributeMetadataBuilder PicklistAttribute(string schemaName, string displayName, string description, AttributeRequiredLevel requiredLevel, bool isGlobal, OptionSetType optionSetType, Dictionary<string, int> optionValues)
+        {
+            // Define the primary attribute for the entity
+            // Create a integer attribute	
+            int languageCode = 1033;
+            var att = new PicklistAttributeMetadata()
+            {
+                // Set base properties
+                SchemaName = schemaName,
+                DisplayName = new Label(schemaName, languageCode),
+                RequiredLevel = new AttributeRequiredLevelManagedProperty(requiredLevel),
+                Description = new Label(description, languageCode),
+                // Set extended properties
+                OptionSet = new OptionSetMetadata
+                {
+                    IsGlobal = isGlobal,
+                    OptionSetType = optionSetType
+                }
+
+            };
+
+            foreach (var optionValue in optionValues)
+            {
+                att.OptionSet.Options.Add(new OptionMetadata(new Label(optionValue.Key, languageCode), optionValue.Value));
+            }
+
+            this.Attributes.Add(att);
+            return this;
+        }
+        
     }
 }

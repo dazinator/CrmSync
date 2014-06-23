@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Globalization;
 using System.Linq;
 using CrmAdo;
 using CrmSync.Plugin;
 using Microsoft.Synchronization.Data;
 using Microsoft.Synchronization.Data.Server;
+using Microsoft.Xrm.Sdk.Metadata;
 
 namespace CrmSync.Tests
 {
@@ -50,6 +52,18 @@ namespace CrmSync.Tests
         public static string NameAttributeName = TestEntityName + "name";
         public static string IdAttributeName = TestEntityName + "id";
 
+        public static string TestDatetimeColumnName = TestEntityName + "datetime";
+        public static string TestDateOnlyColumnName = TestEntityName + "dateonly";
+
+        public static string DecimalColumnNamePrefix = TestEntityName + "dec";
+        public static string MoneyColumnNamePrefix = TestEntityName + "mon";
+        public static string BoolColumnName = TestEntityName + "bool";
+        public static string IntColumnName = TestEntityName + "int";
+
+        public static string MemoColumnName = TestEntityName + "memo";
+        public static string PicklistColumnName = TestEntityName + "picklist";
+
+
         public static List<ColumnInfo> AllColumnInfo = new List<ColumnInfo>();
         public static List<ColumnInfo> SelectColumns = new List<ColumnInfo>();
 
@@ -57,6 +71,7 @@ namespace CrmSync.Tests
         public static List<ColumnInfo> UpdateColumns = new List<ColumnInfo>();
 
         public static List<ColumnInfo> ClientInsertColumns = new List<ColumnInfo>();
+
 
         private void LoadColumnInfo()
         {
@@ -70,9 +85,12 @@ namespace CrmSync.Tests
             var createdByColumn = new ColumnInfo("createdby", DbType.Guid);
             AllColumnInfo.Add(createdByColumn);
 
+            var createdOnColumn = new ColumnInfo("createdon", DbType.DateTime);
+            AllColumnInfo.Add(createdByColumn);
+
             var createdOnBehalfByColumn = new ColumnInfo("createdonbehalfby", DbType.Guid);
             AllColumnInfo.Add(createdOnBehalfByColumn);
-            
+
             var modifiedByColumn = new ColumnInfo("modifiedby", DbType.Guid);
             AllColumnInfo.Add(modifiedByColumn);
 
@@ -101,6 +119,60 @@ namespace CrmSync.Tests
             var createdRowVersionColumn = new ColumnInfo(SyncColumnInfo.CreatedRowVersionAttributeName, DbType.Decimal);
             AllColumnInfo.Add(createdRowVersionColumn);
 
+            //Custom fields of various types.
+
+            // Date and time
+            var testDateTimeColumn = new ColumnInfo(TestDatetimeColumnName, DbType.DateTime);
+            AllColumnInfo.Add(testDateTimeColumn);
+
+            // Date only
+            var testDateOnlyColumn = new ColumnInfo(TestDateOnlyColumnName, DbType.Date);
+            AllColumnInfo.Add(testDateOnlyColumn);
+
+            // Decimal columns
+            // Loop through supported decimal precision and create a decimal attribute for each precision.
+            for (int i = DecimalAttributeMetadata.MinSupportedPrecision; i <= DecimalAttributeMetadata.MaxSupportedPrecision; i++)
+            {
+                var decColumn = new ColumnInfo(TestDynamicsCrmServerSyncProvider.DecimalColumnNamePrefix + i.ToString(CultureInfo.InvariantCulture), DbType.Decimal);
+                AllColumnInfo.Add(decColumn);
+            }
+
+            // Money Columns
+            // Loop through supported money precision and create a money attribute for each precision.
+            for (int i = MoneyAttributeMetadata.MinSupportedPrecision; i <= MoneyAttributeMetadata.MaxSupportedPrecision; i++)
+            {
+                var monColumn = new ColumnInfo(TestDynamicsCrmServerSyncProvider.MoneyColumnNamePrefix + i.ToString(CultureInfo.InvariantCulture), DbType.Currency);
+                AllColumnInfo.Add(monColumn);
+            }
+
+            // Bool
+            var boolColumn = new ColumnInfo(TestDynamicsCrmServerSyncProvider.BoolColumnName, DbType.Int32);
+            AllColumnInfo.Add(boolColumn);
+
+            //// int
+            //// Add in all possible integer formats.
+            //var enumVals = Enum.GetValues(typeof(IntegerFormat));
+            //foreach (var enumVal in enumVals)
+            //{
+            //    IntegerFormat format = (IntegerFormat)enumVal;
+            //    string formatName = format.ToString();
+            //    var attName = TestDynamicsCrmServerSyncProvider.IntColumnName + formatName;
+
+            //    var intColumn = new ColumnInfo(attName, DbType.Int32);
+            //    AllColumnInfo.Add(intColumn);
+
+            //}
+
+            // memo
+            var memoColumn = new ColumnInfo(TestDynamicsCrmServerSyncProvider.MemoColumnName, DbType.String);
+            AllColumnInfo.Add(memoColumn);
+
+
+            // picklist
+            var picklistColumn = new ColumnInfo(TestDynamicsCrmServerSyncProvider.PicklistColumnName, DbType.Int32);
+            AllColumnInfo.Add(picklistColumn);
+
+
             // Fields to be included in server insert statement.
             InsertColumns.Add(idColumn);
             InsertColumns.Add(nameColumn);
@@ -126,20 +198,51 @@ namespace CrmSync.Tests
             SelectColumns.Add(owningUserColumn);
             SelectColumns.Add(versionNumberColumn);
             SelectColumns.Add(createdBySyncClientIdColumn);
-          //  SelectColumns.Add(createdRowVersionColumn);
+            //  SelectColumns.Add(createdRowVersionColumn);
 
-            //var excluded = new List<string>();
-            //excluded.Add(SyncColumnInfo.CreatedBySyncClientIdAttributeName);
-            //excluded.Add(SyncColumnInfo.RowVersionAttributeName);
-            //foreach (var a in AllColumnInfo)
+            SelectColumns.Add(createdOnColumn);
+
+            // Specific fields.
+            // dates
+            SelectColumns.Add(testDateTimeColumn);
+            SelectColumns.Add(testDateOnlyColumn);
+
+            // decimal columns
+            for (int i = DecimalAttributeMetadata.MinSupportedPrecision; i <= DecimalAttributeMetadata.MaxSupportedPrecision; i++)
+            {
+                var name = TestDynamicsCrmServerSyncProvider.DecimalColumnNamePrefix + i.ToString(CultureInfo.InvariantCulture);
+                var existingCol = AllColumnInfo.Single(c => c.AttributeName == name);
+                SelectColumns.Add(existingCol);
+            }
+
+            // money columns
+            for (int i = MoneyAttributeMetadata.MinSupportedPrecision; i <= MoneyAttributeMetadata.MaxSupportedPrecision; i++)
+            {
+                var name = TestDynamicsCrmServerSyncProvider.MoneyColumnNamePrefix + i.ToString(CultureInfo.InvariantCulture);
+                var existingCol = AllColumnInfo.Single(c => c.AttributeName == name);
+                SelectColumns.Add(existingCol);
+            }
+
+            // bool
+            SelectColumns.Add(boolColumn);
+
+            //// int
+            //foreach (var enumVal in enumVals)
             //{
-            //    // dont include the client id in selection.
-            //    if (!excluded.Contains(a.AttributeName))
-            //    {
-            //        SelectColumns.Add(a);
-            //    }
+            //    IntegerFormat format = (IntegerFormat)enumVal;
+            //    string formatName = format.ToString();
+            //    var attName = TestDynamicsCrmServerSyncProvider.IntColumnName + formatName;
+
+            //    var existingCol = AllColumnInfo.Single(c => c.AttributeName == attName);
+            //    SelectColumns.Add(existingCol);
+
             //}
 
+            // memo
+            SelectColumns.Add(memoColumn);
+
+            // picklist
+            SelectColumns.Add(picklistColumn);
         }
 
         public TestDynamicsCrmServerSyncProvider(string crmConnectionString)

@@ -234,19 +234,82 @@ namespace CrmSync.Tests.SystemTests
 
 
                     var entityBuilder = EntityConstruction.ConstructEntity(TestDynamicsCrmServerSyncProvider.TestEntityName);
-                    createRequest.Entity = entityBuilder
-                             .Description("Sync Plugin Test")
-                             .DisplayCollectionName("Sync Plugin Test Entities")
-                             .DisplayName("Sync Plugin Test")
-                             .WithAttributes()
-                             .StringAttribute(TestDynamicsCrmServerSyncProvider.NameAttributeName, "name", "name attribute", AttributeRequiredLevel.Recommended, 255, StringFormat.Text)
-                             .StringAttribute(SyncColumnInfo.CreatedBySyncClientIdAttributeName, "created by sync client", "The sync client that created this record", AttributeRequiredLevel.Recommended, 255, StringFormat.Text)
 
-                             .DecimalAttribute(SyncColumnInfo.CreatedRowVersionAttributeName,
-                                              "CrmSync Creation Version",
-                                              "The RowVersion of the record when it was created.",
-                                              AttributeRequiredLevel.None, 0, null, 0)
-                             .MetaDataBuilder.Build();
+
+                    var attBuilder = entityBuilder
+                          .Description("Sync Plugin Test")
+                          .DisplayCollectionName("Sync Plugin Test Entities")
+                          .DisplayName("Sync Plugin Test")
+                          .WithAttributes()
+                          .StringAttribute(TestDynamicsCrmServerSyncProvider.NameAttributeName, "name", "name attribute", AttributeRequiredLevel.Recommended, 255, StringFormat.Text)
+                          .StringAttribute(SyncColumnInfo.CreatedBySyncClientIdAttributeName, "created by sync client", "The sync client that created this record", AttributeRequiredLevel.Recommended, 255, StringFormat.Text)
+
+                          .DecimalAttribute(SyncColumnInfo.CreatedRowVersionAttributeName,
+                                           "CrmSync Creation Version",
+                                           "The RowVersion of the record when it was created.",
+                                           AttributeRequiredLevel.None, 0, null, 0)
+                          .DateTimeAttribute(TestDynamicsCrmServerSyncProvider.TestDatetimeColumnName,
+                                           "test date time",
+                                           "The test datetime value.", AttributeRequiredLevel.None, DateTimeFormat.DateAndTime, ImeMode.Auto)
+                          .DateTimeAttribute(TestDynamicsCrmServerSyncProvider.TestDateOnlyColumnName,
+                                           "test date time",
+                                           "The test datetime value.", AttributeRequiredLevel.None, DateTimeFormat.DateOnly, ImeMode.Auto);
+
+
+                    // Loop through supported decimal precision and create a decimal attribute for each precision.
+                    for (int i = DecimalAttributeMetadata.MinSupportedPrecision; i <= DecimalAttributeMetadata.MaxSupportedPrecision; i++)
+                    {
+                        attBuilder = attBuilder.DecimalAttribute(TestDynamicsCrmServerSyncProvider.DecimalColumnNamePrefix + i.ToString(CultureInfo.InvariantCulture),
+                            "test dec " + i.ToString(CultureInfo.InvariantCulture), "test decimal field", AttributeRequiredLevel.Recommended,
+                           System.Convert.ToDecimal(DecimalAttributeMetadata.MinSupportedValue), System.Convert.ToDecimal(DecimalAttributeMetadata.MaxSupportedValue), i);
+                    }
+
+                    // Loop through supported money precision and create a money attribute for each precision.
+                    for (int i = MoneyAttributeMetadata.MinSupportedPrecision; i <= MoneyAttributeMetadata.MaxSupportedPrecision; i++)
+                    {
+                        attBuilder = attBuilder.MoneyAttribute(TestDynamicsCrmServerSyncProvider.MoneyColumnNamePrefix + i.ToString(CultureInfo.InvariantCulture),
+                            "test money " + i.ToString(CultureInfo.InvariantCulture), "test money field", AttributeRequiredLevel.Recommended,
+                           MoneyAttributeMetadata.MinSupportedValue, MoneyAttributeMetadata.MaxSupportedValue, i, 0);
+                    }
+
+                    attBuilder = attBuilder.BooleanAttribute(TestDynamicsCrmServerSyncProvider.BoolColumnName, "test bool",
+                                                "test bool field", AttributeRequiredLevel.Recommended, "Yes", 1, "No", 2);
+
+                    //// Add in all possible integer formats.
+                    //var enumVals = Enum.GetValues(typeof(IntegerFormat));
+                    //foreach (var enumVal in enumVals)
+                    //{
+                    //    IntegerFormat format = (IntegerFormat)enumVal;
+                    //    string formatName = format.ToString();
+
+                    //    attBuilder = attBuilder.IntAttribute(TestDynamicsCrmServerSyncProvider.IntColumnName + formatName, "test int" + formatName,
+                    //                        "test int field", AttributeRequiredLevel.Recommended, format, 0, int.MaxValue);
+
+                    //}
+
+                    // TODO experiment with other formats of memo although not sure they really make sense..
+                    attBuilder.MemoAttribute(TestDynamicsCrmServerSyncProvider.MemoColumnName, "test memo",
+                                             "test memo field", AttributeRequiredLevel.Recommended, 255,
+                                             StringFormat.TextArea);
+
+
+                    // TODO experiment with other formats of memo although not sure they really make sense..
+                    var options = new Dictionary<string, int>();
+                    for (int i = 0; i < 5; i++)
+                    {
+                        string labelText = "testoption" + i;
+                        var optionVal = 1000000 + i;
+                        options.Add(labelText, optionVal);
+                    }
+
+                    //todo what about global?
+                    //todo what about other OptionSetTypes?
+                    attBuilder.PicklistAttribute(TestDynamicsCrmServerSyncProvider.PicklistColumnName, "test picklist",
+                                             "test picklist field", AttributeRequiredLevel.Recommended, false, OptionSetType.Picklist, options);
+
+
+                    createRequest.Entity = entityBuilder.Build();
+
 
                     //  createRequest.HasActivities = false;
                     //  createRequest.HasNotes = false;
