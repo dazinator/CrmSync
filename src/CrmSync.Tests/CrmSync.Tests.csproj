@@ -189,19 +189,7 @@
       <Name>CrmSync</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\tools\CrmSvcUtil.exe" />
-    <Content Include="bin\tools\CrmSvcUtil.xml" />
-    <Content Include="bin\tools\Microsoft.Crm.Sdk.Proxy.dll" />
-    <Content Include="bin\tools\Microsoft.Xrm.Client.dll" />
-    <Content Include="bin\tools\Microsoft.Xrm.Sdk.dll" />
-    <Content Include="bin\tools\SolutionPackager.exe" />
-    <Content Include="bin\tools\WebsiteCopy.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Debug\" />
-    <Folder Include="bin\Release\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
