@@ -10,6 +10,7 @@ using Microsoft.Xrm.Sdk.Query;
 
 namespace CrmSync.Tests.SystemTests
 {
+    [Obsolete("Work in progress")]
     public class CrmSyncClient
     {
 

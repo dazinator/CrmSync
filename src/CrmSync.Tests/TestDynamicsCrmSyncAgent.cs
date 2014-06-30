@@ -41,6 +41,13 @@ namespace CrmSync.Tests
             //Registering a plugin for #1 with correct plugin step to run post create.
 
         }
-        
+
+
+        public TestDynamicsCrmServerSyncProvider DynamicsSyncProvider { get { return this.RemoteProvider as TestDynamicsCrmServerSyncProvider; } }
+
+        public TestClientSyncProvider ClientSyncProvider { get { return this.LocalProvider as TestClientSyncProvider; } }
+
+
+
     }
 }

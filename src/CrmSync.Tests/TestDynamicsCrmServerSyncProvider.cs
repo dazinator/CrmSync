@@ -63,6 +63,9 @@ namespace CrmSync.Tests
         public static string MemoColumnName = TestEntityName + "memo";
         public static string PicklistColumnName = TestEntityName + "picklist";
 
+        public static int PicklistColumnMinValue = 1000000;
+        public static int PicklistColumnMaxValue = 1000005;
+
 
         public static List<ColumnInfo> AllColumnInfo = new List<ColumnInfo>();
         public static List<ColumnInfo> SelectColumns = new List<ColumnInfo>();
@@ -70,7 +73,6 @@ namespace CrmSync.Tests
         public static List<ColumnInfo> InsertColumns = new List<ColumnInfo>();
         public static List<ColumnInfo> UpdateColumns = new List<ColumnInfo>();
 
-        public static List<ColumnInfo> ClientInsertColumns = new List<ColumnInfo>();
 
 
         private void LoadColumnInfo()
@@ -177,9 +179,8 @@ namespace CrmSync.Tests
             InsertColumns.Add(idColumn);
             InsertColumns.Add(nameColumn);
             InsertColumns.Add(createdBySyncClientIdColumn);
+            InsertColumns.Add(picklistColumn);
 
-            // Fields to be included in client insert statement.
-            ClientInsertColumns.Add(nameColumn);
 
             // Fields to be included in server update statement.
             UpdateColumns.Add(nameColumn);
@@ -376,27 +377,34 @@ namespace CrmSync.Tests
             return par;
         }
 
-        public void InsertNewRecord()
+        public void InsertNewRecord(int numberOfRecords)
         {
 
             var valuesForInsert = new Dictionary<string, string>();
-
-            var valuesClause = Utility.BuildSqlValuesClause(InsertColumns, valuesForInsert);
+            var random = new Random();
             var insertColumnNames = string.Join(",", InsertColumns.Select(s => s.AttributeName));
 
-            var commandText = string.Format("INSERT INTO {0} ({1}) VALUES ({2})",
-                                            TestEntityName, insertColumnNames, valuesClause);
+            var insertCommandProjection = string.Format("INSERT INTO {0} ({1}) VALUES", TestEntityName, insertColumnNames);
 
             int rowCount = 0;
             using (var serverConn = this.Connection)
             {
                 serverConn.Open();
                 // An insert..
-                using (var command = serverConn.CreateCommand())
+                for (int i = 0; i < numberOfRecords; i++)
                 {
-                    command.CommandText = commandText;
-                    rowCount = command.ExecuteNonQuery();
+                    valuesForInsert.Clear();
+                    valuesForInsert[TestDynamicsCrmServerSyncProvider.PicklistColumnName] = random.Next(PicklistColumnMinValue, PicklistColumnMaxValue).ToString();
+                    var valuesClause = Utility.BuildSqlValuesClause(InsertColumns, valuesForInsert);
+                    var commandText = string.Format("{0} ({1})", insertCommandProjection, valuesClause);
+
+                    using (var command = serverConn.CreateCommand())
+                    {
+                        command.CommandText = commandText;
+                        rowCount += command.ExecuteNonQuery();
+                    }
                 }
+
                 serverConn.Close();
             }
 

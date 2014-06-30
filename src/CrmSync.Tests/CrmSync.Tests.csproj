@@ -164,7 +164,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CrmSyncPluginTests.cs" />
-    <Compile Include="SystemTests\CrmSyncClient.cs" />
+    <Compile Include="WIP\CrmSyncClient.cs" />
     <Compile Include="SystemTests\CrmSyncTests.cs" />
     <Compile Include="SystemTests\RegisterPluginSystemTests.cs" />
     <Compile Include="SystemTests\CrmSyncPluginTests.cs" />

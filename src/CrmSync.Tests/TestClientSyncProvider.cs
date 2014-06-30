@@ -3,10 +3,12 @@ using System.Data;
 using System.Data.SqlServerCe;
 using System.Globalization;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using CrmSync.Dynamics;
 using Microsoft.Synchronization.Data;
 using Microsoft.Synchronization.Data.SqlServerCe;
+using System.Collections.Generic;
 
 namespace CrmSync.Tests
 {
@@ -23,8 +25,6 @@ namespace CrmSync.Tests
             this.CreatingSchema += new EventHandler<CreatingSchemaEventArgs>(SampleClientSyncProvider_CreatingSchema);
             this.SchemaCreated += new EventHandler<SchemaCreatedEventArgs>(SampleClientSyncProvider_SchemaCreated);
             this.ApplyChangeFailed += SampleClientSyncProvider_ApplyChangeFailed;
-
-
 
         }
 
@@ -146,6 +146,41 @@ namespace CrmSync.Tests
 
         }
 
+        public void InsertTestRecord(int numberOfRecords, List<ColumnInfo> insertColumns)
+        {
+
+            var valuesForInsert = new Dictionary<string, string>();
+            var sqlColumns = string.Join(",", insertColumns.Select(s => s.AttributeName));
+            var random = new Random();
+            var testEntityName = TestDynamicsCrmServerSyncProvider.TestEntityName;
+            var insertCommandProjection = string.Format("INSERT INTO {0} ({1}) VALUES", testEntityName, sqlColumns);
+        
+            int rowCount = 0;
+            using (var clientConn = new SqlCeConnection(this.ConnectionString))
+            {
+                clientConn.Open();
+
+                for (int i = 0; i < numberOfRecords; i++)
+                {
+                    valuesForInsert.Clear();
+                    valuesForInsert[TestDynamicsCrmServerSyncProvider.PicklistColumnName] = random.Next(TestDynamicsCrmServerSyncProvider.PicklistColumnMinValue, TestDynamicsCrmServerSyncProvider.PicklistColumnMaxValue).ToString();
+                    
+                    var valuesClause = Utility.BuildSqlValuesClause(insertColumns, valuesForInsert);
+                    var commandText = string.Format("{0} ({1})", insertCommandProjection, valuesClause);
+
+                    using (var sqlCeCommand = clientConn.CreateCommand())
+                    {
+                        sqlCeCommand.CommandText = commandText;
+                        rowCount += sqlCeCommand.ExecuteNonQuery();
+                    }
+
+                }               
+               
+
+                clientConn.Close();
+            }
+            Console.WriteLine("{0} Rows inserted at the client", rowCount);
+        }
 
     }
 }

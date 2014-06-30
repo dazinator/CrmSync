@@ -68,7 +68,7 @@ namespace CrmSync.Tests.SystemTests
         }
 
         [Test]
-        public void Can_Sync_Incremental_Create()
+        public void Can_Sync_Single_Insert_On_Client_Roundtrip_With_Server()
         {
             var dataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory");
             Console.WriteLine(dataDirectory);
@@ -100,15 +100,22 @@ namespace CrmSync.Tests.SystemTests
             }
 
 
-            //Make changes on the server and client.
-            // InsertNewRecordOnServer();
-            InsertNewRecordOnClient();
+            //Make changes on the client.
+            // We will insert into the same columns on the client that the server sync provider includes in its server insert statement,
+            // with exception of the sync client id field (thats only provided during a sync)
 
-            //Subsequent synchronization.
+            var columnsForClientInsert = TestDynamicsCrmServerSyncProvider.InsertColumns.ToList();
+            var syncClientIdColumn = columnsForClientInsert.First(c => c.AttributeName == SyncColumnInfo.CreatedBySyncClientIdAttributeName);
+            columnsForClientInsert.Remove(syncClientIdColumn);
+            sampleSyncAgent.ClientSyncProvider.InsertTestRecord(1, columnsForClientInsert);
+
+            //Now sync the new record on the client to the server.
             syncStatistics = sampleSyncAgent.Synchronize();
             sampleStats.DisplayStats(syncStatistics, "second");
 
-            // Verfiy new record added on server.
+            // Verfiy new record is added on server.
+            Assert.That(syncStatistics.DownloadChangesFailed, Is.EqualTo(0), "There were failed downloads during the sync.");
+            Assert.That(syncStatistics.UploadChangesFailed, Is.EqualTo(0), "There were failed uploads during the sync.");
             var service = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
             using (var orgService = service.GetOrganisationService() as OrganizationServiceContext)
             {
@@ -117,12 +124,21 @@ namespace CrmSync.Tests.SystemTests
                 var clientId = entity.Attributes[SyncColumnInfo.CreatedBySyncClientIdAttributeName];
                 Assert.That(clientId, Is.EqualTo(SelectIncrementalCreatesCommand.SyncClientId), "A record was inserted during synchronisation, however it did not have a client id set.");
 
+                // verify all the other fields are set.
+                foreach (var col in columnsForClientInsert)
+                {
+
+                    var testAttribute = entity.Attributes[col.AttributeName];
+                    Assert.That(testAttribute, Is.Not.Null, "A record was inserted during synchronisation, however it did not have a value for the attribute:  " + col.AttributeName);
+                    Assert.That(testAttribute.ToString(), Is.Not.EqualTo(""), "The attribute " + col.AttributeName + " had a value inserted to the client but was then synced to the server, and was blank on the server after the sync finished.");
+
+                }
+
             }
 
-            // Verfiy client record was updated?
-            Assert.That(syncStatistics.DownloadChangesFailed, Is.EqualTo(0), "There were failed downloads during the sync.");
-            Assert.That(syncStatistics.UploadChangesFailed, Is.EqualTo(0), "There were failed uploads during the sync.");
 
+            // Now sync one more time and verify that the new reocrd that has been applied to the server does not come back as an insert on the client again! 
+            // The server updates the record as its saved to the server so it should come back as an update with the server generated values set on the record.
             syncStatistics = sampleSyncAgent.Synchronize();
             sampleStats.DisplayStats(syncStatistics, "third");
 
@@ -295,10 +311,10 @@ namespace CrmSync.Tests.SystemTests
 
                     // TODO experiment with other formats of memo although not sure they really make sense..
                     var options = new Dictionary<string, int>();
-                    for (int i = 0; i < 5; i++)
+                    for (int i = TestDynamicsCrmServerSyncProvider.PicklistColumnMinValue; i <= TestDynamicsCrmServerSyncProvider.PicklistColumnMaxValue; i++)
                     {
                         string labelText = "testoption" + i;
-                        var optionVal = 1000000 + i;
+                        var optionVal = i;
                         options.Add(labelText, optionVal);
                     }
 
@@ -315,19 +331,29 @@ namespace CrmSync.Tests.SystemTests
                     //  createRequest.HasNotes = false;
                     createRequest.PrimaryAttribute = (StringAttributeMetadata)entityBuilder.AttributeBuilder.Attributes[0];
                     //  createRequest.SolutionUniqueName =
-
                     try
                     {
+
                         var createResponse = (CreateEntityResponse)orgService.Execute(createRequest);
                         foreach (var att in entityBuilder.AttributeBuilder.Attributes.Where(a => a.SchemaName != TestDynamicsCrmServerSyncProvider.NameAttributeName))
                         {
-                            var createAttributeRequest = new CreateAttributeRequest
+                            try
                             {
-                                EntityName = entityBuilder.Entity.LogicalName,
-                                Attribute = att
-                            };
-                            var createAttResponse = (CreateAttributeResponse)orgService.Execute(createAttributeRequest);
+                                var createAttributeRequest = new CreateAttributeRequest
+                                {
+                                    EntityName = entityBuilder.Entity.LogicalName,
+                                    Attribute = att
+                                };
+                                var createAttResponse = (CreateAttributeResponse)orgService.Execute(createAttributeRequest);
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception("Could not create attribute: " + att.LogicalName + ", because " + ex.Message);
+                                // throw;
+                            }
+
                         }
+
                     }
                     catch (Exception e)
                     {
@@ -410,29 +436,7 @@ namespace CrmSync.Tests.SystemTests
             Utility.DeleteAndRecreateCompactDatabase(SqlCompactDatabaseConnectionString, false);
         }
 
-        private void InsertNewRecordOnClient()
-        {
-            var valuesForInsert = new Dictionary<string, string>();
-            var valuesClause = Utility.BuildSqlValuesClause(TestDynamicsCrmServerSyncProvider.ClientInsertColumns, valuesForInsert);
-            var sqlColumns = string.Join(",",
-                                         TestDynamicsCrmServerSyncProvider.ClientInsertColumns.Select(
-                                             s => s.AttributeName));
-            var commandText = string.Format("INSERT INTO {0} ({1}) VALUES ({2})",
-                                                  TestDynamicsCrmServerSyncProvider.TestEntityName, sqlColumns, valuesClause);
 
-            int rowCount = 0;
-            using (var clientConn = new SqlCeConnection(SqlCompactDatabaseConnectionString))
-            {
-                clientConn.Open();
-                using (var sqlCeCommand = clientConn.CreateCommand())
-                {
-                    sqlCeCommand.CommandText = commandText;
-                    rowCount = sqlCeCommand.ExecuteNonQuery();
-                }
-                clientConn.Close();
-            }
-            Console.WriteLine("{0} Rows inserted at the client", rowCount);
-        }
 
         #endregion
 
