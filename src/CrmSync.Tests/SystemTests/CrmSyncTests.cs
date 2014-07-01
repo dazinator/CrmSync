@@ -43,6 +43,7 @@ namespace CrmSync.Tests.SystemTests
         [TestFixtureSetUp]
         public void Setup()
         {
+            Console.WriteLine("Is running in 64 bit process? " + Environment.Is64BitProcess);
             var dataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory");
             Console.WriteLine(dataDirectory);
 
@@ -73,6 +74,7 @@ namespace CrmSync.Tests.SystemTests
             var dataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory");
             Console.WriteLine(dataDirectory);
 
+            Console.WriteLine("Is running in 64 bit process? " + Environment.Is64BitProcess);
             if (dataDirectory == null)
             {
                 Assert.Fail("No data directory.");

@@ -9,12 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CrmSync</RootNamespace>
     <AssemblyName>CrmSync</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,76 +57,116 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>CrmSync.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'x86|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'x86|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\x86\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'x86|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\x86\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'x64|AnyCPU'">
+    <OutputPath>bin\x64\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'x64|x64'">
+    <OutputPath>bin\x64\x64\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'x64|x86'">
+    <OutputPath>bin\x86\x64\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AntiXSSLibrary">
+    <Reference Include="AntiXSSLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\AntiXSSLibrary.dll</HintPath>
     </Reference>
     <Reference Include="CrmAdo, Version=1.0.10.0, Culture=neutral, PublicKeyToken=ba966c247ee8fd34, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\CrmAdo.1.0.10.0\lib\net45\CrmAdo.dll</HintPath>
+      <HintPath>..\..\lib\CrmAdo.1.0.10.0\lib\net40\CrmAdo.dll</HintPath>
     </Reference>
-    <Reference Include="CrmDeploy">
-      <HintPath>..\..\lib\CrmDeploy.1.0.1.0\lib\net45\CrmDeploy.dll</HintPath>
+    <Reference Include="CrmDeploy, Version=1.0.1.0, Culture=neutral, PublicKeyToken=2ec22558a11116e4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\CrmDeploy.1.0.1.0\lib\net40\CrmDeploy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.1.0\lib\net40\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\..\lib\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.ServiceBus, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\WindowsAzure.ServiceBus.2.1.2.0\lib\net40-full\Microsoft.ServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Synchronization, Version=2.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\x64\Microsoft.Synchronization.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Synchronization.Data, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\x64\Microsoft.Synchronization.Data.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Synchronization.Data.Server, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\x64\Microsoft.Synchronization.Data.Server.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Synchronization.Data.SqlServer, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\x64\Microsoft.Synchronization.Data.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Synchronization.Data.SqlServerCe, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\x64\Microsoft.Synchronization.Data.SqlServerCe.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.WindowsAzure.ConfigurationManager.2.0.0.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Client.CodeGeneration">
+    <Reference Include="Microsoft.Xrm.Client.CodeGeneration, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Client.CodeGeneration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Portal">
+    <Reference Include="Microsoft.Xrm.Portal, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Portal.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Portal.Files">
+    <Reference Include="Microsoft.Xrm.Portal.Files, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Portal.Files.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.1.0\lib\net40\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Deployment, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.CrmSdk.Deployment.6.1.0\lib\net40\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.Deployment.6.0.2\lib\net40\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -138,8 +179,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services" />
     <Reference Include="System.Data.Services.Client" />
-    <Reference Include="System.Data.SqlServerCe, Version=3.5.1.50, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
       <HintPath>..\..\lib\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
     <Reference Include="System.Design" />
@@ -221,11 +262,64 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="bin\Debug\amd64\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
+    <None Include="bin\Debug\CrmSync.exe.config" />
+    <None Include="bin\Debug\CrmSync.vshost.exe.config" />
+    <None Include="bin\Debug\CrmSync.vshost.exe.manifest" />
+    <None Include="bin\Debug\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
     <None Include="CrmSync.snk" />
     <None Include="packages.config" />
     <None Include="Solution\SyncTest_1_0_0_managed.zip" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Debug\amd64\Microsoft.VC90.CRT\msvcr90.dll" />
+    <Content Include="bin\Debug\amd64\Microsoft.VC90.CRT\README_ENU.txt" />
+    <Content Include="bin\Debug\amd64\sqlceca40.dll" />
+    <Content Include="bin\Debug\amd64\sqlcecompact40.dll" />
+    <Content Include="bin\Debug\amd64\sqlceer40EN.dll" />
+    <Content Include="bin\Debug\amd64\sqlceme40.dll" />
+    <Content Include="bin\Debug\amd64\sqlceqp40.dll" />
+    <Content Include="bin\Debug\amd64\sqlcese40.dll" />
+    <Content Include="bin\Debug\AntiXSSLibrary.dll" />
+    <Content Include="bin\Debug\CrmAdo.dll" />
+    <Content Include="bin\Debug\CrmDeploy.dll" />
+    <Content Include="bin\Debug\CrmSync.exe" />
+    <Content Include="bin\Debug\CrmSync.pdb" />
+    <Content Include="bin\Debug\CrmSync.Plugin.dll" />
+    <Content Include="bin\Debug\CrmSync.Plugin.pdb" />
+    <Content Include="bin\Debug\CrmSync.vshost.exe" />
+    <Content Include="bin\Debug\Microsoft.Crm.Sdk.Proxy.dll" />
+    <Content Include="bin\Debug\Microsoft.Crm.Sdk.Proxy.xml" />
+    <Content Include="bin\Debug\Microsoft.IdentityModel.dll" />
+    <Content Include="bin\Debug\Microsoft.ServiceBus.dll" />
+    <Content Include="bin\Debug\Microsoft.ServiceBus.xml" />
+    <Content Include="bin\Debug\Microsoft.WindowsAzure.Configuration.dll" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Client.CodeGeneration.dll" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Client.dll" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Client.xml" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Portal.dll" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Portal.Files.dll" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Portal.xml" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Deployment.dll" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Deployment.xml" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.dll" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.xml" />
+    <Content Include="bin\Debug\SQLGeneration.dll" />
+    <Content Include="bin\Debug\x86\Microsoft.VC90.CRT\msvcr90.dll" />
+    <Content Include="bin\Debug\x86\Microsoft.VC90.CRT\README_ENU.txt" />
+    <Content Include="bin\Debug\x86\sqlceca40.dll" />
+    <Content Include="bin\Debug\x86\sqlcecompact40.dll" />
+    <Content Include="bin\Debug\x86\sqlceer40EN.dll" />
+    <Content Include="bin\Debug\x86\sqlceme40.dll" />
+    <Content Include="bin\Debug\x86\sqlceqp40.dll" />
+    <Content Include="bin\Debug\x86\sqlcese40.dll" />
+    <Content Include="bin\tools\CrmSvcUtil.exe" />
+    <Content Include="bin\tools\CrmSvcUtil.xml" />
+    <Content Include="bin\tools\Microsoft.Crm.Sdk.Proxy.dll" />
+    <Content Include="bin\tools\Microsoft.Xrm.Client.dll" />
+    <Content Include="bin\tools\Microsoft.Xrm.Sdk.dll" />
+    <Content Include="bin\tools\SolutionPackager.exe" />
+    <Content Include="bin\tools\WebsiteCopy.exe" />
     <Content Include="ToDo.txt" />
   </ItemGroup>
   <ItemGroup>
