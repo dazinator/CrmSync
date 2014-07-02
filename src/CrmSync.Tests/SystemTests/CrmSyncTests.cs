@@ -428,7 +428,10 @@ namespace CrmSync.Tests.SystemTests
             var sqlConnectionString = ConfigurationManager.ConnectionStrings["CrmOfflineSqlCompactDb"];
             if (sqlConnectionString != null)
             {
-                SqlCompactDatabaseConnectionString = ConfigurationManager.ConnectionStrings["CrmOfflineSqlCompactDb"].ConnectionString;
+                var currentDir = Environment.CurrentDirectory;
+                var connString = ConfigurationManager.ConnectionStrings["CrmOfflineSqlCompactDb"].ConnectionString;
+                connString = connString.Replace("{CurrentDir}",currentDir);
+                SqlCompactDatabaseConnectionString = connString;
             }
             else
             {

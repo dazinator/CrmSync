@@ -100,6 +100,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\WindowsAzure.ServiceBus.2.1.2.0\lib\net40-full\Microsoft.ServiceBus.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Synchronization.Data, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Synchronization.Data.Server, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Synchronization.Data.SqlServer, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Synchronization.Data.SqlServerCe, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Microsoft.WindowsAzure.ConfigurationManager.2.0.0.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
@@ -152,22 +156,6 @@
     <Reference Include="Microsoft.Synchronization, Version=2.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\x64\Microsoft.Synchronization.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Synchronization.Data, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\x64\Microsoft.Synchronization.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Synchronization.Data.Server, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\x64\Microsoft.Synchronization.Data.Server.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Synchronization.Data.SqlServer, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\x64\Microsoft.Synchronization.Data.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Synchronization.Data.SqlServerCe, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\x64\Microsoft.Synchronization.Data.SqlServerCe.dll</HintPath>
     </Reference>
     <Reference Include="SQLGeneration, Version=2.5.0.0, Culture=neutral, PublicKeyToken=afc02b0a5b22e21e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
