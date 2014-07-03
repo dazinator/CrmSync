@@ -14,33 +14,17 @@ using NUnit.Framework;
 using CrmSync.Plugin;
 
 namespace CrmSync.Tests.SystemTests
-{
-    [Category("System")]
-    [Category("Crm Plugin")]
+{  
+    [Category("Plugin")]
     [TestFixture]
-    public class CrmSyncPluginSystemTests
-    {
-        public const string TestEntityName = "crmsync_testpluginentity";
-        public const string NameAttributeName = "crmsync_testpluginentityname";
+    public class CrmSyncPluginSystemTests : CrmSyncIntegrationTest
+    {     
 
         public CrmSyncPluginSystemTests()
         {
 
         }
 
-        public RegistrationInfo PluginRegistrationInfo { get; set; }
-
-        [TestFixtureSetUp]
-        public void Setup()
-        {
-            // Ensure custom test entity present in crm.
-            var service = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
-            CreateTestEntity(service);
-
-            // Ensure Plugin Registered in CRM.
-            RegisterPlugin(service);
-
-        }
 
         [Test]
         public void Crm_Plugin_Captures_Creation_Version_On_Create_Of_Entity()
@@ -51,8 +35,9 @@ namespace CrmSync.Tests.SystemTests
             using (var orgServiceContext = (OrganizationServiceContext)service.GetOrganisationService())
             {
                 // Create a new entity record which should fire plugin in crm.
-                var testEntity = new Entity(TestEntityName);
-                testEntity[NameAttributeName] = "you shall pass!";
+                var testEntity = new Entity(this.TestEntityLogicalName);
+                var nameAttribute = this.TestEntityMetadata.PrimaryNameAttribute;
+                testEntity[nameAttribute] = "you shall pass!";
                 var orgService = (IOrganizationService)orgServiceContext;
                 var newRecordId = orgService.Create(testEntity);
 
@@ -60,7 +45,7 @@ namespace CrmSync.Tests.SystemTests
                 Console.WriteLine("Record created: " + newRecordId);
 
                 // pull back the record and verify the plugin captured the creation version of the record.
-                var ent = orgService.Retrieve(TestEntityName, newRecordId, new ColumnSet(SyncColumnInfo.RowVersionAttributeName, SyncColumnInfo.CreatedRowVersionAttributeName));
+                var ent = orgService.Retrieve(this.TestEntityLogicalName, newRecordId, new ColumnSet(SyncColumnInfo.RowVersionAttributeName, SyncColumnInfo.CreatedRowVersionAttributeName));
 
                 Assert.That(ent.Attributes.ContainsKey(SyncColumnInfo.CreatedRowVersionAttributeName));
                 Assert.That(ent.Attributes.ContainsKey(SyncColumnInfo.RowVersionAttributeName));
@@ -87,139 +72,6 @@ namespace CrmSync.Tests.SystemTests
 
         }
 
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-            // Ensure custom test entity removed.
-            var service = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
-
-            UnregisterPlugin(service);
-            DeleteTestEntity(service);
-        }
-
-        private void RegisterPlugin(CrmServiceProvider serviceProvider)
-        {
-            var orgConnectionString = ConfigurationManager.ConnectionStrings["CrmOrganisationService"];
-
-            var deployer = DeploymentBuilder.CreateDeployment()
-                                                           .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>("Test plugin assembly")
-                                                            .RunsInSandboxMode()
-                                                            .RegisterInDatabase()
-                                                           .HasPlugin<CrmSyncChangeTrackerPlugin>()
-                                                            .WhichExecutesOn(SdkMessageNames.Create, TestEntityName)
-                                                            .Synchronously()
-                                                            .PostOperation()
-                                                            .OnlyOnCrmServer()
-                                                           .DeployTo(orgConnectionString.ConnectionString);
-
-            PluginRegistrationInfo = deployer.Deploy();
-            if (!PluginRegistrationInfo.Success)
-            {
-                Assert.Fail("Registration failed..");
-            }
-        }
-
-        private void UnregisterPlugin(CrmServiceProvider service)
-        {
-            PluginRegistrationInfo.Undeploy();
-        }
-
-        /// <summary>
-        /// Ensures test entity is created in CRM.
-        /// </summary>
-        /// <param name="serviceProvider"></param>
-        private void CreateTestEntity(ICrmServiceProvider serviceProvider)
-        {
-            using (var orgService = (OrganizationServiceContext)serviceProvider.GetOrganisationService())
-            {
-                // Check for test entity - if it doesn't exist then create it.
-                var request = new RetrieveEntityRequest();
-                request.RetrieveAsIfPublished = true;
-                request.LogicalName = TestEntityName;
-                RetrieveEntityResponse response = null;
-                try
-                {
-                    response = (RetrieveEntityResponse)orgService.Execute(request);
-                }
-                catch (Exception e)
-                {
-                    if (e.Message.ToLower().StartsWith("could not find"))
-                    {
-                        response = null;
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                if (response == null || response.EntityMetadata == null)
-                {
-                    var createRequest = new CreateEntityRequest();
-
-
-                    var entityBuilder = EntityConstruction.ConstructEntity(TestEntityName);
-                    createRequest.Entity = entityBuilder
-                             .Description("Sync Plugin Test")
-                             .DisplayCollectionName("Sync Plugin Test Entities")
-                             .DisplayName("Sync Plugin Test")
-                             .WithAttributes()
-                             .StringAttribute(NameAttributeName, "name", "name attribute", AttributeRequiredLevel.Recommended, 255, StringFormat.Text)
-                             .DecimalAttribute(SyncColumnInfo.CreatedRowVersionAttributeName,
-                                              "CrmSync Creation Version",
-                                              "The RowVersion of the record when it was created.",
-                                              AttributeRequiredLevel.None, 0, null, 0)
-                             .MetaDataBuilder.Build();
-
-                    //  createRequest.HasActivities = false;
-                    //  createRequest.HasNotes = false;
-                    createRequest.PrimaryAttribute = (StringAttributeMetadata)entityBuilder.AttributeBuilder.Attributes[0];
-                    //  createRequest.SolutionUniqueName =
-
-                    try
-                    {
-                        var createResponse = (CreateEntityResponse)orgService.Execute(createRequest);
-                        foreach (var att in entityBuilder.AttributeBuilder.Attributes.Where(a => a.SchemaName != NameAttributeName))
-                        {
-                            var createAttributeRequest = new CreateAttributeRequest
-                            {
-                                EntityName = entityBuilder.Entity.LogicalName,
-                                Attribute = att
-                            };
-                            var createAttResponse = (CreateAttributeResponse)orgService.Execute(createAttributeRequest);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        throw;
-                    }
-
-
-
-                }
-
-            }
-        }
-
-        /// <summary>
-        /// Ensures test entity is deleted from CRM.
-        /// </summary>
-        /// <param name="serviceProvider"></param>
-        private void DeleteTestEntity(ICrmServiceProvider serviceProvider)
-        {
-            using (var orgService = (OrganizationServiceContext)serviceProvider.GetOrganisationService())
-            {
-                // Check for test entity - if it doesn't exist then create it.
-                var request = new DeleteEntityRequest();
-                request.LogicalName = TestEntityName;
-                var response = (DeleteEntityResponse)orgService.Execute(request);
-                if (response == null)
-                {
-                    throw new Exception("Expected response.");
-                }
-
-            }
-        }
 
     }
 

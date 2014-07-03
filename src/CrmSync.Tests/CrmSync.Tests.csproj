@@ -202,17 +202,21 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CrmSyncPluginTests.cs" />
+    <Compile Include="TestBase\CrmIntegrationTest.cs" />
+    <Compile Include="TestBase\CrmSyncIntegrationTest.cs" />
+    <Compile Include="TestBase\CrmUnitTest.cs" />
+    <Compile Include="UnitTests\CrmSyncPluginTests.cs" />
     <Compile Include="WIP\CrmSyncClient.cs" />
-    <Compile Include="SystemTests\CrmSyncTests.cs" />
+    <Compile Include="SystemTests\SingleInsertOnClientSyncToServerTest.cs" />
     <Compile Include="SystemTests\RegisterPluginSystemTests.cs" />
     <Compile Include="SystemTests\CrmSyncPluginTests.cs" />
-    <Compile Include="MockOrgService.cs" />
+    <Compile Include="Mocks\MockOrgService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestDynamicsCrmServerSyncProvider.cs" />
-    <Compile Include="TestDynamicsCrmSyncAgent.cs" />
-    <Compile Include="TestClientSyncProvider.cs" />
-    <Compile Include="Utitlity.cs" />
+    <Compile Include="WIP\TestDynamicsCrmServerSyncProvider.cs" />
+    <Compile Include="WIP\TestDynamicsCrmSyncAgent.cs" />
+    <Compile Include="WIP\TestClientSyncProvider.cs" />
+    <Compile Include="WIP\Utitlity.cs" />
+    <Compile Include="WIP\SolutionComponentType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

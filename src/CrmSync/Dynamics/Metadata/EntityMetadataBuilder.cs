@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
+using System.Linq;
 
 namespace CrmSync.Dynamics.Metadata
 {
@@ -23,7 +24,7 @@ namespace CrmSync.Dynamics.Metadata
                     SchemaName = entityName,
                     IsActivity = false,
                     IsActivityParty = false,
-                    OwnershipType =  OwnershipTypes.UserOwned
+                    OwnershipType = OwnershipTypes.UserOwned,
                 };
 
             AttributeBuilder = new EntityAttributeMetadataBuilder(this);
@@ -74,7 +75,11 @@ namespace CrmSync.Dynamics.Metadata
         {
             this.Entity.DisplayName = new Label(displayName, lcid);
             return this;
-        }
+        }       
 
+        public StringAttributeMetadata GetNameAttribute()
+        {
+            return AttributeBuilder.PrimaryNameAttribute;
+        }
     }
 }

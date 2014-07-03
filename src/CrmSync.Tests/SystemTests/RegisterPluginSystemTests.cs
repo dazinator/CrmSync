@@ -7,22 +7,19 @@ using NUnit.Framework;
 
 namespace CrmSync.Tests.SystemTests
 {
-    [Category("System")]
-    [Category("Crm Plugin")]
+
+    [Category("Plugin")]
     [TestFixture]
-    public class RegisterPluginSystemTests
+    public class RegisterPluginSystemTests : CrmIntegrationTest
     {
         public RegistrationInfo RegistrationInfo = null;
 
-        public RegisterPluginSystemTests()
+        protected override void SetUp()
         {
-
         }
 
-        [TestFixtureSetUp]
-        public void Setup()
+        public RegisterPluginSystemTests()
         {
-            // Ensure custom test entity present in crm.
 
         }
 
@@ -56,12 +53,10 @@ namespace CrmSync.Tests.SystemTests
 
         }
 
-        [TestFixtureTearDown]
-        public void TearDown()
+        protected override void TearDown()
         {
             RegistrationInfo.Undeploy();
         }
-
     }
 }
 

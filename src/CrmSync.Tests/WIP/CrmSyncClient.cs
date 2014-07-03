@@ -83,23 +83,23 @@ namespace CrmSync.Tests.SystemTests
 
                 createRequest.PrimaryAttribute = (StringAttributeMetadata)entityBuilder.AttributeBuilder.Attributes[0];
                 //  createRequest.SolutionUniqueName =
-                try
+                //try
+                //{
+                var createResponse = (CreateEntityResponse)_OrganizationService.Execute(createRequest);
+                foreach (var att in entityBuilder.AttributeBuilder.Attributes.Where(a => a.SchemaName != nameattributename))
                 {
-                    var createResponse = (CreateEntityResponse)_OrganizationService.Execute(createRequest);
-                    foreach (var att in entityBuilder.AttributeBuilder.Attributes.Where(a => a.SchemaName != nameattributename))
-                    {
-                        var createAttributeRequest = new CreateAttributeRequest
-                            {
-                                EntityName = entityBuilder.Entity.LogicalName,
-                                Attribute = att
-                            };
-                        var createAttResponse = (CreateAttributeResponse)_OrganizationService.Execute(createAttributeRequest);
-                    }
+                    var createAttributeRequest = new CreateAttributeRequest
+                        {
+                            EntityName = entityBuilder.Entity.LogicalName,
+                            Attribute = att
+                        };
+                    var createAttResponse = (CreateAttributeResponse)_OrganizationService.Execute(createAttributeRequest);
                 }
-                catch (Exception e)
-                {
-                    throw;
-                }
+                //}
+                //catch (Exception e)
+                //{
+                //    throw;
+                //}
 
             }
         }

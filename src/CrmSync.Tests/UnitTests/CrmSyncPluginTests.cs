@@ -3,11 +3,13 @@ using CrmSync.Plugin;
 using Microsoft.Xrm.Sdk;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
+using CrmSync.Tests.TestBase;
 
 namespace CrmSync.Tests
 {
     [TestFixture]
-    public class CrmSyncPluginTests
+    [Category("Plugin")]
+    public class CrmSyncPluginTests : CrmUnitTest
     {
 
         public CrmSyncPluginTests()
@@ -41,7 +43,7 @@ namespace CrmSync.Tests
     }
 
     /// <summary>
-    /// Subject Under Test - we use extract and override technique.
+    /// Subject Under Test - we use 'extract and override technique' to isolate out depedencies.
     /// </summary>
     public class TestCrmSyncChangeTrackerPlugin : CrmSyncChangeTrackerPlugin
     {

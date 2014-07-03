@@ -31,6 +31,11 @@ namespace CrmSync.Dynamics
             _credentialsProvider = credentialsProvider;
         }
 
+        public CrmServiceProvider(ICrmConnectionProvider connectionProvider)
+            : this(connectionProvider, new CrmClientCredentialsProvider())
+        {
+        }
+
         public IOrganizationService GetOrganisationService()
         {
             CrmConnection connection = null;
@@ -125,7 +130,7 @@ namespace CrmSync.Dynamics
             get { return _CrmConnectionProvider; }
         }
 
-       
+
 
     }
 }

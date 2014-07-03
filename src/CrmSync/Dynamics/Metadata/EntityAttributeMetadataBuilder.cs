@@ -13,12 +13,32 @@ namespace CrmSync.Dynamics.Metadata
 
         public List<AttributeMetadata> Attributes { get; set; }
 
+        public StringAttributeMetadata PrimaryNameAttribute { get; set; }
+
         public EntityAttributeMetadataBuilder(EntityMetadataBuilder metadataBuilder)
         {
             MetaDataBuilder = metadataBuilder;
             Attributes = new List<AttributeMetadata>();
         }
 
+        public EntityAttributeMetadataBuilder NameAttribute(string schemaName, string logicalName, string displayName, string description,
+                                                              AttributeRequiredLevel requiredLevel,
+                                                              int maxLength, StringFormat format)
+        {
+            // Define the primary attribute for the entity
+            var newAtt = new StringAttributeMetadata
+            {
+                SchemaName = schemaName,
+                RequiredLevel = new AttributeRequiredLevelManagedProperty(requiredLevel),
+                MaxLength = maxLength,
+                Format = format,
+                DisplayName = new Label(displayName, 1033),
+                Description = new Label(description, 1033),
+                LogicalName = logicalName
+            };
+            PrimaryNameAttribute = newAtt;
+            return this;
+        }
 
         public EntityAttributeMetadataBuilder StringAttribute(string schemaName, string displayName, string description,
                                                                AttributeRequiredLevel requiredLevel,
@@ -137,7 +157,7 @@ namespace CrmSync.Dynamics.Metadata
             this.Attributes.Add(att);
             return this;
         }
-        
+
         public EntityAttributeMetadataBuilder MemoAttribute(string schemaName, string displayName, string description, AttributeRequiredLevel requiredLevel, int maxLength, StringFormat format, ImeMode imeMode = ImeMode.Disabled)
         {
             // Define the primary attribute for the entity
@@ -209,6 +229,6 @@ namespace CrmSync.Dynamics.Metadata
             this.Attributes.Add(att);
             return this;
         }
-        
+
     }
 }
