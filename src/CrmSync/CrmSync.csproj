@@ -108,22 +108,24 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\AntiXSSLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="CrmAdo, Version=1.0.10.0, Culture=neutral, PublicKeyToken=ba966c247ee8fd34, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\CrmAdo.1.0.10.0\lib\net40\CrmAdo.dll</HintPath>
+    <Reference Include="CrmAdo, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ba966c247ee8fd34, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\lib\CrmAdo.1.1.0.0\lib\net40\CrmAdo.dll</HintPath>
     </Reference>
     <Reference Include="CrmDeploy, Version=1.0.1.0, Culture=neutral, PublicKeyToken=2ec22558a11116e4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\CrmDeploy.1.0.1.0\lib\net40\CrmDeploy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <Private>True</Private>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.1.0\lib\net40\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.ServiceBus, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\WindowsAzure.ServiceBus.2.1.2.0\lib\net40-full\Microsoft.ServiceBus.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\lib\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ServiceBus">
+      <HintPath>..\..\lib\WindowsAzure.ServiceBus.2.4.2.0\lib\net40-full\Microsoft.ServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Synchronization, Version=2.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -132,9 +134,8 @@
     <Reference Include="Microsoft.Synchronization.Data.Server, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Synchronization.Data.SqlServer, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Synchronization.Data.SqlServerCe, Version=3.1.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.WindowsAzure.ConfigurationManager.2.0.0.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Configuration">
+      <HintPath>..\..\lib\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -153,18 +154,17 @@
       <HintPath>..\..\lib\Microsoft.CrmSdk.Extensions.6.0.4\lib\net40\Microsoft.Xrm.Portal.Files.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.0.4\lib\net40\Microsoft.Xrm.Sdk.dll</HintPath>
+      <Private>True</Private>
+      <HintPath>..\..\lib\Microsoft.CrmSdk.CoreAssemblies.6.1.0\lib\net40\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk.Deployment, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.CrmSdk.Deployment.6.0.2\lib\net40\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk.Deployment">
+      <HintPath>..\..\lib\Microsoft.CrmSdk.Deployment.6.1.0\lib\net40\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="SQLGeneration, Version=2.5.0.0, Culture=neutral, PublicKeyToken=afc02b0a5b22e21e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\SQLGeneration.2.5.0.0\lib\net40\SQLGeneration.dll</HintPath>
+    <Reference Include="SQLGeneration, Version=2.5.0.0, Culture=neutral, PublicKeyToken=22ea15b5a3c0e6aa, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\lib\SQLGeneration.DazinatorFork.2.5.3\lib\net40\SQLGeneration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

@@ -25,6 +25,9 @@ namespace CrmSync.Tests
         private string _SqlCompactDatabaseConnectionString;
         public string SqlCompactDatabaseConnectionString { get { return _SqlCompactDatabaseConnectionString; } }
 
+        private string _CrmOrgConnectionString;
+        public string CrmOrgConnectionString { get { return _CrmOrgConnectionString; } }
+
         private string _TestEntityLogicalName;
         public string TestEntityLogicalName { get { return _TestEntityLogicalName; } }
 
@@ -38,6 +41,7 @@ namespace CrmSync.Tests
             try
             {
                 _TestEntityLogicalName = TestDynamicsCrmServerSyncProvider.TestEntityName;
+                EnsureCrmOrgConnectionString();
                 EnsureSqlCompactDatabaseConnectionString();
                 DeleteSqlCompactDatabase();
                 DeprovisionTestEntity();
@@ -83,6 +87,22 @@ namespace CrmSync.Tests
             else
             {
                 throw new Exception("Missing connection stirng in config file, with key: 'CrmOfflineSqlCompactDb'");
+            }
+        }
+
+        private void EnsureCrmOrgConnectionString()
+        {
+            var orgConnectionString = ConfigurationManager.ConnectionStrings["CrmOrganisation"];
+            if (orgConnectionString != null)
+            {
+                //var currentDir = Environment.CurrentDirectory;
+                var connString = ConfigurationManager.ConnectionStrings["CrmOrganisation"].ConnectionString;
+                //  connString = connString.Replace("{CurrentDir}", currentDir);
+                _CrmOrgConnectionString = connString;
+            }
+            else
+            {
+                throw new Exception("Missing crm connection string in config file, with key: 'CrmOrganisation'");
             }
         }
 
@@ -196,7 +216,7 @@ namespace CrmSync.Tests
                     //  createRequest.HasActivities = false;
                     //  createRequest.HasNotes = false;
                     createRequest.PrimaryAttribute = entityBuilder.GetNameAttribute();
-                    //  createRequest.SolutionUniqueName =
+                    //  createRequest.SolutionUniqueName =                
                     try
                     {
 
@@ -220,8 +240,9 @@ namespace CrmSync.Tests
                         }
 
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        Console.WriteLine(e.Message);
                         throw;
                     }
 
@@ -314,23 +335,34 @@ namespace CrmSync.Tests
 
         private void RegisterSyncPlugin()
         {
-            var orgConnectionString = this.GetCrmServiceProvider().ConnectionProvider.OrganisationServiceConnectionString;
 
+
+            var orgConnectionString = this._CrmOrgConnectionString;
             var deployer = DeploymentBuilder.CreateDeployment()
-                                                           .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>("Test plugin assembly")
-                                                            .RunsInSandboxMode()
-                                                            .RegisterInDatabase()
-                                                           .HasPlugin<CrmSyncChangeTrackerPlugin>()
-                                                            .WhichExecutesOn(SdkMessageNames.Create, TestDynamicsCrmServerSyncProvider.TestEntityName)
-                                                            .Synchronously()
-                                                            .PostOperation()
-                                                            .OnlyOnCrmServer()
-                                                           .DeployTo(orgConnectionString);
+                                                          .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>("Test plugin assembly")
+                                                           .RunsInSandboxMode()
+                                                           .RegisterInDatabase()
+                                                          .HasPlugin<CrmSyncChangeTrackerPlugin>()
+                                                           .WhichExecutesOn(SdkMessageNames.Create, TestDynamicsCrmServerSyncProvider.TestEntityName)
+                                                           .Synchronously()
+                                                           .PostOperation()
+                                                           .OnlyOnCrmServer()
+                                                          .DeployTo(orgConnectionString);
 
             PluginRegistrationInfo = deployer.Deploy();
             if (!PluginRegistrationInfo.Success)
             {
-                Assert.Fail("Registration failed..");
+                Console.WriteLine("Plugin registration failed.. rolling back..");
+                try
+                {
+                    PluginRegistrationInfo.Undeploy();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Rollback failed. " + e.Message);
+                }
+                Assert.Fail("Could not register plugin.");
+
             }
         }
 

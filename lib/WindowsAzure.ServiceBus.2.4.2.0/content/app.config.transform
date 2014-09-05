@@ -1,39 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <configuration>
-
-
-  <connectionStrings>
-    <add name="CrmOrganisation" connectionString="Url=https://crmadonet.crm4.dynamics.com/; Username=testing@crmadonet.onmicrosoft.com; Password=integr@tion1; DeviceID=homepc-dd9f6b7b2e6d; DevicePassword=integr@tion1" providerName="System.Data.DynamicsCrm.2013" />
-    <!--<add name="CrmOfflineSqlCompactDb" connectionString="Data Source=|DataDirectory|SyncSampleClient.sdf; Password=password" providerName="System.Data.SqlServerCe.4.0" />-->
-    <add name="CrmOfflineSqlCompactDb" connectionString="Data Source={CurrentDir}SyncSampleClient.sdf; Password=password" providerName="System.Data.SqlServerCe.4.0" />
-    <!--<add name="CrmOrganisationService" connectionString="Url=https://crmadonet.crm4.dynamics.com/; Username=testing@crmadonet.onmicrosoft.com; Password=integr@tion1; DeviceID=homepc-dd9f6b7b2e6d; DevicePassword=integr@tion1" providerName="System.Data.DynamicsCrm.2013" />-->
-  </connectionStrings>
-
-
-  <runtime>
-    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
-      <dependentAssembly>
-        <assemblyIdentity name="Microsoft.ServiceBus" publicKeyToken="31bf3856ad364e35" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-2.4.0.0" newVersion="2.4.0.0" />
-      </dependentAssembly>
-      <dependentAssembly>
-        <assemblyIdentity name="SQLGeneration" publicKeyToken="afc02b0a5b22e21e" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-2.5.0.0" newVersion="2.5.0.0" />
-      </dependentAssembly>
-      <dependentAssembly>
-        <assemblyIdentity name="System.Data.SqlServerCe" publicKeyToken="89845dcd8080cc91" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
-      </dependentAssembly>
-    </assemblyBinding>
-  </runtime>
-  <startup>
-    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0" />
-  </startup>
-  <system.data>
-    <DbProviderFactories>
-      <add name="CrmAdo Data Provider" invariant="System.Data.DynamicsCrm.CrmAdo" description="CrmAdo Data Provider for Microsoft Dynamics Crm 2013" type="CrmAdo.CrmDbProviderFactory, CrmAdo" />
-    </DbProviderFactories>
-  </system.data>
   <system.serviceModel>
     <extensions>
       <!-- In this extension section we are introducing all known service bus extensions. User can remove the ones they don't need. -->
@@ -62,6 +28,6 @@
   </system.serviceModel>
   <appSettings>
     <!-- Service Bus specific app setings for messaging connections -->
-    <add key="Microsoft.ServiceBus.ConnectionString" value="Endpoint=sb://[your namespace].servicebus.windows.net;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=[your secret]" />
+    <add key="Microsoft.ServiceBus.ConnectionString" value="Endpoint=sb://[your namespace].servicebus.windows.net;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=[your secret]"/>
   </appSettings>
 </configuration>

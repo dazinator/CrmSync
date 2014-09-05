@@ -41,7 +41,6 @@ namespace CrmSync.Tests.SystemTests
                 var orgService = (IOrganizationService)orgServiceContext;
                 var newRecordId = orgService.Create(testEntity);
 
-
                 Console.WriteLine("Record created: " + newRecordId);
 
                 // pull back the record and verify the plugin captured the creation version of the record.

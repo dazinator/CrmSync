@@ -29,7 +29,7 @@ namespace CrmSync.Tests.SystemTests
             var serviceProvider = new CrmServiceProvider(new ExplicitConnectionStringProviderWithFallbackToConfig(), new CrmClientCredentialsProvider());
             //PluginAssembly, PluginType, SdkMessageProcessingStep, and SdkMessageProcessingStepImage. 
 
-            var crmOrgConnectionString = ConfigurationManager.ConnectionStrings["CrmOrganisationService"];
+            var crmOrgConnectionString = ConfigurationManager.ConnectionStrings["CrmOrganisation"];
 
             var deployer = DeploymentBuilder.CreateDeployment()
                                                            .ForTheAssemblyContainingThisPlugin<CrmSyncChangeTrackerPlugin>("Test plugin assembly")
